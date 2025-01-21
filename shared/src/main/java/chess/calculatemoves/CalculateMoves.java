@@ -26,9 +26,9 @@ public class CalculateMoves {
     public Collection<ChessMove> ListMoves(){
 
         return switch ( myPiece.getPieceType() ) {
-            case ChessPiece.PieceType.ROOK   -> RookMoves();
+            case ChessPiece.PieceType.ROOK   -> RookMoves(); //Working!!
             case ChessPiece.PieceType.KNIGHT -> KnightMoves();
-            case ChessPiece.PieceType.BISHOP -> BishopMoves();
+            case ChessPiece.PieceType.BISHOP -> BishopMoves(); //Working!!
             case ChessPiece.PieceType.QUEEN  -> QueenMoves();
             case ChessPiece.PieceType.KING   -> KingMoves();
             case ChessPiece.PieceType.PAWN   -> PawnMoves();
@@ -57,6 +57,39 @@ public class CalculateMoves {
 
     private Collection<ChessMove> BishopMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
+
+        //Checks all of the spots up and right
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow + i, currentCol + i, myList)){
+                break;
+            }
+        }
+
+        //Checks all of the spots down and right
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow - i, currentCol + i, myList)){
+                break;
+            }
+        }
+
+        //Checks all of the spots down and left
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow - i, currentCol - i, myList)){
+                break;
+            }
+        }
+
+        //Checks all of the spots up and left
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow + i, currentCol - i, myList)){
+                break;
+            }
+        }
+
         return myList;
     }
 
