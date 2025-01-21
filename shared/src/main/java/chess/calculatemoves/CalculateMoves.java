@@ -26,7 +26,7 @@ public class CalculateMoves {
     public Collection<ChessMove> ListMoves(){
 
         return switch ( myPiece.getPieceType() ) {
-            case ChessPiece.PieceType.ROOK   -> RookMoves();
+            case ChessPiece.PieceType.ROOK   -> RookMoves(); //Working!!
             case ChessPiece.PieceType.KNIGHT -> KnightMoves();
             case ChessPiece.PieceType.BISHOP -> BishopMoves();
             case ChessPiece.PieceType.QUEEN  -> QueenMoves();
