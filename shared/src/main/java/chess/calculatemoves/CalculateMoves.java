@@ -26,11 +26,11 @@ public class CalculateMoves {
     public Collection<ChessMove> ListMoves(){
 
         return switch ( myPiece.getPieceType() ) {
-            case ChessPiece.PieceType.ROOK   -> RookMoves(); //Working!!
+            case ChessPiece.PieceType.ROOK   -> RookMoves();   //Working!!
             case ChessPiece.PieceType.KNIGHT -> KnightMoves();
             case ChessPiece.PieceType.BISHOP -> BishopMoves(); //Working!!
-            case ChessPiece.PieceType.QUEEN  -> QueenMoves();
-            case ChessPiece.PieceType.KING   -> KingMoves();
+            case ChessPiece.PieceType.QUEEN  -> QueenMoves();  //Working!!
+            case ChessPiece.PieceType.KING   -> KingMoves();   //Working!!
             case ChessPiece.PieceType.PAWN   -> PawnMoves();
         };
     }
@@ -42,16 +42,98 @@ public class CalculateMoves {
 
     private Collection<ChessMove> KnightMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
-        return myList;
+        return  myList;
     }
 
     private Collection<ChessMove> KingMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
+
+        int row;
+        int col;
+
+        //Checks all spots around the piece
+        for(int i = -1; i <= 1; i++){
+            row = currentRow + i;
+            for(int j = -1; j <= 1; j++) {
+                col = currentCol + j;
+                if(row == currentRow && col == currentCol){
+                    continue;
+                } else if (!checkSpot(row, col, myList)){
+                    break;
+                }
+            }
+        }
         return myList;
     }
 
     private Collection<ChessMove> QueenMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
+
+        //Checks all spots up and right
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow + i, currentCol + i, myList)){
+                break;
+            }
+        }
+
+        //Checks all spots down and right
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow - i, currentCol + i, myList)){
+                break;
+            }
+        }
+
+
+        //Checks all spots down and left
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow - i, currentCol - i, myList)){
+                break;
+            }
+        }
+
+        //Checks all spots up and left
+        for(int i = 1; i <= 8; i++) {
+
+            if (!checkSpot(currentRow + i, currentCol - i, myList)) {
+                break;
+            }
+        }
+
+        //Checks all spots up
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow + i, currentCol, myList)){
+                break;
+            }
+        }
+
+        //Checks all spots down
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow - i, currentCol, myList)){
+                break;
+            }
+        }
+
+        //Checks all spots on the left
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow, currentCol - i, myList)){
+                break;
+            }
+        }
+
+        //Checks all spots on the right
+        for(int i = 1; i <= 8; i++){
+
+            if (!checkSpot(currentRow, currentCol + i, myList)){
+                break;
+            }
+        }
+
         return myList;
     }
 
