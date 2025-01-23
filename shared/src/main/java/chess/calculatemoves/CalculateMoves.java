@@ -24,7 +24,7 @@ public class CalculateMoves {
     }
 
     public Collection<ChessMove> ListMoves(){
-
+//        System.out.println(board.toString());
         return switch ( myPiece.getPieceType() ) {
             case ChessPiece.PieceType.ROOK   -> RookMoves();   //Working!!
             case ChessPiece.PieceType.KNIGHT -> KnightMoves(); //Working!!

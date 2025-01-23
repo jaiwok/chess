@@ -3,6 +3,8 @@ package chess;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static chess.ChessPiece.PieceType.*;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -79,6 +81,8 @@ public class ChessBoard {
         addPiece(new ChessPosition(7,6), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         addPiece(new ChessPosition(7,7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         addPiece(new ChessPosition(7,8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
+
+//        System.out.println(this.toString());
     }
 
     @Override
@@ -87,18 +91,61 @@ public class ChessBoard {
 
         for (int i = 8; i >= 1; i--) {
             for (int j = 1; j <= 8; j++) {
-                String spot;
+                String spot = "";
 
                 ChessPiece chessPiece = this.getPiece(new ChessPosition(i, j));
-                ChessPiece.PieceType type = chessPiece.getPieceType();
-                ChessGame.TeamColor color =  chessPiece.getTeamColor();
+                ChessPiece.PieceType type = null;
+                try {
+                    type = chessPiece.getPieceType();
+                }
+                catch (NullPointerException e) {
+                    spot = "|_|";
+                }
+                if (!spot.equals("|_|")) {
+                    ChessGame.TeamColor color =  chessPiece.getTeamColor();
 
-                if (color == ChessGame.TeamColor.BLACK) {
-                    spot = "|p|";
+                    if (color == ChessGame.TeamColor.BLACK) {
+                        if (type == PAWN){
+                            spot = "|p|";
+                        }
+                        else if (type == ROOK){
+                            spot = "|r|";
+                        }
+                        else if (type == KNIGHT){
+                            spot = "|n|";
+                        }
+                        else if (type == BISHOP){
+                            spot = "|b|";
+                        }
+                        else if (type == QUEEN){
+                            spot = "|q|";
+                        }
+                        else if (type == KING){
+                            spot = "|k|";
+                        }
+                    }
+                    else{
+                        if (type == PAWN){
+                            spot = "|P|";
+                        }
+                        else if (type == ROOK){
+                            spot = "|R|";
+                        }
+                        else if (type == KNIGHT){
+                            spot = "|N|";
+                        }
+                        else if (type == BISHOP){
+                            spot = "|B|";
+                        }
+                        else if (type == QUEEN){
+                            spot = "|Q|";
+                        }
+                        else if (type == KING){
+                            spot = "|K|";
+                        }
+                    }
                 }
-                else{
-                    spot = "|P|";
-                }
+
                 chessBoardString.append(spot);
             }
             chessBoardString.append("\n");
