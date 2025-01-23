@@ -81,8 +81,31 @@ public class ChessBoard {
         addPiece(new ChessPosition(7,8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
     }
 
-//FIX ME    ADD TO string method for printing the board
+    @Override
+    public String toString() {
+        StringBuilder chessBoardString = new StringBuilder("Chess Board: \n");
 
+        for (int i = 8; i >= 1; i--) {
+            for (int j = 1; j <= 8; j++) {
+                String spot;
+
+                ChessPiece chessPiece = this.getPiece(new ChessPosition(i, j));
+                ChessPiece.PieceType type = chessPiece.getPieceType();
+                ChessGame.TeamColor color =  chessPiece.getTeamColor();
+
+                if (color == ChessGame.TeamColor.BLACK) {
+                    spot = "|p|";
+                }
+                else{
+                    spot = "|P|";
+                }
+                chessBoardString.append(spot);
+            }
+            chessBoardString.append("\n");
+        }
+
+        return chessBoardString.toString();
+    }
 
     @Override
     public boolean equals(Object o) {
