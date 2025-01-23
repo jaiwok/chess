@@ -27,21 +27,102 @@ public class CalculateMoves {
 
         return switch ( myPiece.getPieceType() ) {
             case ChessPiece.PieceType.ROOK   -> RookMoves();   //Working!!
-            case ChessPiece.PieceType.KNIGHT -> KnightMoves();
+            case ChessPiece.PieceType.KNIGHT -> KnightMoves(); //Working!!
             case ChessPiece.PieceType.BISHOP -> BishopMoves(); //Working!!
             case ChessPiece.PieceType.QUEEN  -> QueenMoves();  //Working!!
             case ChessPiece.PieceType.KING   -> KingMoves();   //Working!!
-            case ChessPiece.PieceType.PAWN   -> PawnMoves();
+            case ChessPiece.PieceType.PAWN   -> PawnMoves();   //Working!!
         };
     }
 
-    private Collection<ChessMove> PawnMoves() {
-        Collection<ChessMove> myList = new ArrayList<>();
-        return myList;
+    private Collection<ChessMove> PawnMoves() {        Collection<ChessMove> arr = new ArrayList<>();
+        int row = currentRow;
+        int col = currentCol;
+        ChessPosition newSpot;
+        if(myPiece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+            row -= 1;
+        } else if (myPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+            row += 1;
+        }
+
+        newSpot = new ChessPosition(row, col);
+        checkPawnMove(row, col, newSpot, arr);
+
+        return arr;
+    }
+
+    private void checkPawnMove(int row, int col, ChessPosition newSpot, Collection<ChessMove> arr) {
+
+        if(board.getPiece(newSpot) == null){
+            if(row == 1 || row == 8) {
+                promotePawn(arr, newSpot);
+            }
+            else if(currentRow == 7 || currentRow == 2) {
+                arr.add(new ChessMove(myPosition, newSpot, null));
+
+                int i = (myPiece.getTeamColor() == ChessGame.TeamColor.WHITE) ? 1 : -1;
+                int rowPlusOne = row + i;
+                newSpot = new ChessPosition(rowPlusOne, col);
+                if(board.getPiece(newSpot) == null){
+                    arr.add(new ChessMove(myPosition, newSpot, null));
+                }
+            }
+            else{
+                arr.add(new ChessMove(myPosition, newSpot, null));
+            }
+        }
+        col += 1;
+        if(col <=8) {
+            newSpot = new ChessPosition(row, col);
+            if (board.getPiece(newSpot) != null && board.getPiece(newSpot).getTeamColor() != myPiece.getTeamColor()) {
+                if(row == 1 || row == 8) {
+                    promotePawn(arr, newSpot);
+                }
+                else{
+                    arr.add(new ChessMove(myPosition, newSpot, null));
+                }
+            }
+        }
+        col -= 2;
+        if (col >= 1) {
+            newSpot = new ChessPosition(row, col);
+            if (board.getPiece(newSpot) != null && board.getPiece(newSpot).getTeamColor() != myPiece.getTeamColor()) {
+                if(row == 1 || row == 8) {
+                    promotePawn(arr, newSpot);
+                }
+                else{
+                    arr.add(new ChessMove(myPosition, newSpot, null));
+                }
+            }
+        }
+    }
+
+    private void promotePawn(Collection<ChessMove> arr, ChessPosition newSpot) {
+        arr.add( new ChessMove(myPosition, newSpot, ChessPiece.PieceType.ROOK));
+        arr.add( new ChessMove(myPosition, newSpot, ChessPiece.PieceType.KNIGHT));
+        arr.add( new ChessMove(myPosition, newSpot, ChessPiece.PieceType.BISHOP));
+        arr.add( new ChessMove(myPosition, newSpot, ChessPiece.PieceType.QUEEN));
     }
 
     private Collection<ChessMove> KnightMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
+
+        int[] row = {-2,-1,1,2};
+        int[] col = {-2,-1,1,2};
+
+        //Checks all spots up and right
+        for(int i : row){
+            for(int j : col) {
+                if(abs(i) == abs(j)){
+                    //skip iteration
+                    continue;
+                } else if (!checkSpot(currentRow + i, currentCol + j, myList)){
+                    //keep checking on this iteration as each spot is not related to another
+                    continue;
+                }
+            }
+        }
+
         return  myList;
     }
 
