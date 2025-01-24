@@ -1,12 +1,15 @@
 package chess.calculatemoves;
 
 
-import chess.*;
-
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static java.lang.Math.abs;
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPiece;
+import chess.ChessPosition;
 
 public class CalculateMoves {
     private final ChessBoard board;
@@ -23,19 +26,19 @@ public class CalculateMoves {
         this.myPiece = myPiece;
     }
 
-    public Collection<ChessMove> ListMoves(){
+    public Collection<ChessMove> listMoves(){
 //        System.out.println(board.toString());
         return switch ( myPiece.getPieceType() ) {
-            case ChessPiece.PieceType.ROOK   -> RookMoves();   //Working!!
-            case ChessPiece.PieceType.KNIGHT -> KnightMoves(); //Working!!
-            case ChessPiece.PieceType.BISHOP -> BishopMoves(); //Working!!
-            case ChessPiece.PieceType.QUEEN  -> QueenMoves();  //Working!!
-            case ChessPiece.PieceType.KING   -> KingMoves();   //Working!!
-            case ChessPiece.PieceType.PAWN   -> PawnMoves();   //Working!!
+            case ChessPiece.PieceType.ROOK   -> rookMoves();   //Working!!
+            case ChessPiece.PieceType.KNIGHT -> knightMoves(); //Working!!
+            case ChessPiece.PieceType.BISHOP -> bishopMoves(); //Working!!
+            case ChessPiece.PieceType.QUEEN  -> queenMoves();  //Working!!
+            case ChessPiece.PieceType.KING   -> kingMoves();   //Working!!
+            case ChessPiece.PieceType.PAWN   -> pawnMoves();   //Working!!
         };
     }
 
-    private Collection<ChessMove> PawnMoves() {        Collection<ChessMove> arr = new ArrayList<>();
+    private Collection<ChessMove> pawnMoves() {        Collection<ChessMove> arr = new ArrayList<>();
         int row = currentRow;
         int col = currentCol;
         ChessPosition newSpot;
@@ -104,7 +107,7 @@ public class CalculateMoves {
         arr.add( new ChessMove(myPosition, newSpot, ChessPiece.PieceType.QUEEN));
     }
 
-    private Collection<ChessMove> KnightMoves() {
+    private Collection<ChessMove> knightMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
 
         int[] row = {-2,-1,1,2};
@@ -126,7 +129,7 @@ public class CalculateMoves {
         return  myList;
     }
 
-    private Collection<ChessMove> KingMoves() {
+    private Collection<ChessMove> kingMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
 
         int row;
@@ -147,7 +150,7 @@ public class CalculateMoves {
         return myList;
     }
 
-    private Collection<ChessMove> QueenMoves() {
+    private Collection<ChessMove> queenMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
 
         //Checks all spots up and right
@@ -218,7 +221,7 @@ public class CalculateMoves {
         return myList;
     }
 
-    private Collection<ChessMove> BishopMoves() {
+    private Collection<ChessMove> bishopMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
 
         //Checks all of the spots up and right
@@ -256,7 +259,7 @@ public class CalculateMoves {
         return myList;
     }
 
-    private Collection<ChessMove> RookMoves(){
+    private Collection<ChessMove> rookMoves(){
         Collection<ChessMove> myList = new ArrayList<>();
 
         //Checks all of the spots up

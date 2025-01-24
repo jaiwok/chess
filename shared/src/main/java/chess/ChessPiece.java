@@ -1,9 +1,9 @@
 package chess;
 
-import chess.calculatemoves.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+
+import chess.calculatemoves.CalculateMoves;
 
 /**
  * Represents a single chess piece
@@ -56,7 +56,7 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         CalculateMoves listMoves = new CalculateMoves(board, myPosition, this);
-        return listMoves.ListMoves();
+        return listMoves.listMoves();
     }
 
     @Override
@@ -69,7 +69,9 @@ public class ChessPiece {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
