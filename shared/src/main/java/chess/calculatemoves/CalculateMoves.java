@@ -74,8 +74,8 @@ public class CalculateMoves {
                 arr.add(new ChessMove(myPosition, newSpot, null));
             }
         }
-        int[] col_inc = {1,-2};
-        for (int i : col_inc) {
+        int[] colInc = {1,-2};
+        for (int i : colInc) {
             col += i;
             if(col <=8 && col >= 1) {
                 newSpot = new ChessPosition(row, col);
