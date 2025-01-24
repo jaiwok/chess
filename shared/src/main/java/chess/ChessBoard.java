@@ -100,52 +100,23 @@ public class ChessBoard {
                 }
                 catch (NullPointerException e) {
                     spot = "|_|";
+                    chessBoardString.append(spot);
+                    continue;
                 }
-                if (!spot.equals("|_|")) {
-                    ChessGame.TeamColor color =  chessPiece.getTeamColor();
+                ChessGame.TeamColor color =  chessPiece.getTeamColor();
 
-                    if (color == ChessGame.TeamColor.BLACK) {
-                        if (type == PAWN){
-                            spot = "|p|";
-                        }
-                        else if (type == ROOK){
-                            spot = "|r|";
-                        }
-                        else if (type == KNIGHT){
-                            spot = "|n|";
-                        }
-                        else if (type == BISHOP){
-                            spot = "|b|";
-                        }
-                        else if (type == QUEEN){
-                            spot = "|q|";
-                        }
-                        else if (type == KING){
-                            spot = "|k|";
-                        }
-                    }
-                    else{
-                        if (type == PAWN){
-                            spot = "|P|";
-                        }
-                        else if (type == ROOK){
-                            spot = "|R|";
-                        }
-                        else if (type == KNIGHT){
-                            spot = "|N|";
-                        }
-                        else if (type == BISHOP){
-                            spot = "|B|";
-                        }
-                        else if (type == QUEEN){
-                            spot = "|Q|";
-                        }
-                        else if (type == KING){
-                            spot = "|K|";
-                        }
-                    }
+                spot = switch(type){
+                    case PAWN -> "|P|";
+                    case ROOK -> "|R|";
+                    case KNIGHT -> "|N|";
+                    case BISHOP -> "|B|";
+                    case QUEEN -> "|Q|";
+                    case KING -> "|K|";
+                };
+
+                if (color == ChessGame.TeamColor.BLACK) {
+                    spot = spot.toLowerCase();
                 }
-
                 chessBoardString.append(spot);
             }
             chessBoardString.append("\n");

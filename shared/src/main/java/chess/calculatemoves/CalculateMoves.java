@@ -224,7 +224,7 @@ public class CalculateMoves {
     private Collection<ChessMove> bishopMoves() {
         Collection<ChessMove> myList = new ArrayList<>();
 
-        //Checks all of the spots up and right
+        //Checks all spots up and right
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow + i, currentCol + i, myList)){
@@ -232,7 +232,7 @@ public class CalculateMoves {
             }
         }
 
-        //Checks all of the spots down and right
+        //Checks all spots down and right
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow - i, currentCol + i, myList)){
@@ -240,7 +240,7 @@ public class CalculateMoves {
             }
         }
 
-        //Checks all of the spots down and left
+        //Checks all spots down and left
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow - i, currentCol - i, myList)){
@@ -248,7 +248,7 @@ public class CalculateMoves {
             }
         }
 
-        //Checks all of the spots up and left
+        //Checks all spots up and left
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow + i, currentCol - i, myList)){
@@ -262,7 +262,7 @@ public class CalculateMoves {
     private Collection<ChessMove> rookMoves(){
         Collection<ChessMove> myList = new ArrayList<>();
 
-        //Checks all of the spots up
+        //Checks all spots up
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow + i, currentCol, myList)){
@@ -270,7 +270,7 @@ public class CalculateMoves {
             }
         }
 
-        //Checks all of the spots down
+        //Checks all spots down
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow - i, currentCol, myList)){
@@ -278,7 +278,7 @@ public class CalculateMoves {
             }
         }
 
-        //Checks all of the spots left
+        //Checks all spots left
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow, currentCol - i, myList)){
@@ -286,7 +286,7 @@ public class CalculateMoves {
             }
         }
 
-        //Checks all of the spots right
+        //Checks all spots right
         for(int i = 1; i <= 8; i++){
 
             if (!checkSpot(currentRow, currentCol + i, myList)){
