@@ -74,27 +74,18 @@ public class CalculateMoves {
                 arr.add(new ChessMove(myPosition, newSpot, null));
             }
         }
-        col += 1;
-        if(col <=8) {
-            newSpot = new ChessPosition(row, col);
-            if (board.getPiece(newSpot) != null && board.getPiece(newSpot).getTeamColor() != myPiece.getTeamColor()) {
-                if(row == 1 || row == 8) {
-                    promotePawn(arr, newSpot);
-                }
-                else{
-                    arr.add(new ChessMove(myPosition, newSpot, null));
-                }
-            }
-        }
-        col -= 2;
-        if (col >= 1) {
-            newSpot = new ChessPosition(row, col);
-            if (board.getPiece(newSpot) != null && board.getPiece(newSpot).getTeamColor() != myPiece.getTeamColor()) {
-                if(row == 1 || row == 8) {
-                    promotePawn(arr, newSpot);
-                }
-                else{
-                    arr.add(new ChessMove(myPosition, newSpot, null));
+        int[] col_inc = {1,-2};
+        for (int i : col_inc) {
+            col += i;
+            if(col <=8 && col >= 1) {
+                newSpot = new ChessPosition(row, col);
+                if (board.getPiece(newSpot) != null && board.getPiece(newSpot).getTeamColor() != myPiece.getTeamColor()) {
+                    if(row == 1 || row == 8) {
+                        promotePawn(arr, newSpot);
+                    }
+                    else{
+                        arr.add(new ChessMove(myPosition, newSpot, null));
+                    }
                 }
             }
         }
