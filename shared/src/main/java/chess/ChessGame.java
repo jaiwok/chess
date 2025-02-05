@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.ArrayList;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
@@ -20,6 +21,7 @@ public class ChessGame {
         this.board = new ChessBoard();
         this.board.resetBoard();
         this.currentTeam = WHITE;
+        this.gameOver = false;
     }
 
     /**
@@ -55,6 +57,9 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
+        ChessGame.TeamColor color = piece.getTeamColor();
+        Collection<ChessMove> allMoves = piece.pieceMoves(board, startPosition);
+        Collection<ChessMove> validMoves = new ArrayList<>();
 
 
         //need to filter this for valid moves that prevent check/checkmate
@@ -70,9 +75,37 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        //Change if its a promotion piece logic
-        board.addPiece(move.getStartPosition(), null);
-        board.addPiece(move.getEndPosition(), board.getPiece(move.getStartPosition()));
+        try{
+            ChessPiece piece = board.getPiece(move.getStartPosition());
+            Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
+            ChessGame.TeamColor pieceColor = piece.getTeamColor();
+
+            if(pieceColor != getTeamTurn()){
+                throw new InvalidMoveException();
+            }
+
+            if(validMoves.isEmpty()){
+                throw new InvalidMoveException();
+            } else if(!validMoves.contains(move)){
+                throw new InvalidMoveException();
+            }
+
+            //remove piece
+            board.addPiece(move.getStartPosition(), null);
+
+            //add new piece
+            if(move.getPromotionPiece() == null){
+                board.addPiece(move.getEndPosition(), piece);
+            } else {
+                board.addPiece(move.getEndPosition(), new ChessPiece(pieceColor, move.getPromotionPiece()));
+            }
+
+            //switch turns
+            setTeamTurn(pieceColor == WHITE ? BLACK: WHITE);
+
+        } catch(Exception NullPointerException){
+            throw new InvalidMoveException();
+        }
     }
 
     /**
