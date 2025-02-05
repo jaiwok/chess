@@ -17,6 +17,7 @@ public class ChessGame {
     private TeamColor currentTeam;
     private ChessBoard board;
     boolean gameOver;
+
     public ChessGame() {
         this.board = new ChessBoard();
         this.board.resetBoard();
@@ -57,15 +58,28 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
-        ChessGame.TeamColor color = piece.getTeamColor();
-        Collection<ChessMove> allMoves = piece.pieceMoves(board, startPosition);
-        Collection<ChessMove> validMoves = new ArrayList<>();
+        TeamColor color = piece.getTeamColor();
+        Collection<ChessMove> possibleMoves = piece.pieceMoves(board, startPosition);
+        Collection<ChessMove> filteredMoves = new ArrayList<>();
+
+        for(ChessMove move : possibleMoves){
+            ChessBoard testBoard = duplicateBoard();
+
+            ChessPosition start = move.getStartPosition();
+            ChessPosition end   = move.getEndPosition();
+
+            testBoard.addPiece(start, null);
+            testBoard.addPiece(end, piece); //do I need to worry about promotions here?
+            if(!isInCheck(color, testBoard)){
+                filteredMoves.add(move);
+            }
+        }
 
 
         //need to filter this for valid moves that prevent check/checkmate
         //also add moves for en passaunt and castling
 
-        return piece.pieceMoves(board, startPosition);
+        return filteredMoves;
     }
 
     /**
@@ -78,7 +92,7 @@ public class ChessGame {
         try{
             ChessPiece piece = board.getPiece(move.getStartPosition());
             Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
-            ChessGame.TeamColor pieceColor = piece.getTeamColor();
+            TeamColor pieceColor = piece.getTeamColor();
 
             if(pieceColor != getTeamTurn()){
                 throw new InvalidMoveException();
@@ -119,6 +133,16 @@ public class ChessGame {
     }
 
     /**
+     * Determines if the given team is in check
+     *
+     * @param teamColor which team to check for check
+     * @param testBoard deep copy of currentGame
+     * @return True if the specified team is in check
+     */
+    private boolean isInCheck(TeamColor color, ChessBoard testBoard) {
+        throw new RuntimeException("Not Implemented");
+    }
+    /**
      * Determines if the given team is in checkmate
      *
      * @param teamColor which team to check for checkmate
@@ -156,4 +180,62 @@ public class ChessGame {
     public ChessBoard getBoard() {
         return board;
     }
+
+    /**
+     * duplicates the chessboard for testing
+     *
+     * @return a duplicated chessboard
+     */
+    private ChessBoard duplicateBoard(){
+        ChessBoard newBoard = new ChessBoard();
+        for (int i = 0; i <= 8; i++){
+            for (int j = 0; j <= 8 ; j++) {
+                ChessPosition position = new ChessPosition(i,j);
+                ChessPiece piece = board.getPiece(position);
+                if(piece != null){
+                    newBoard.addPiece(position, piece);
+                }
+            }
+        }
+        return newBoard;
+    }
 }
+
+//
+//public boolean isInCheck(TeamColor teamColor) {
+//
+//    ChessPosition kingPosition = findKing(teamColor, board);
+//    // iterate through the whole board
+//    for(int row =  1; row <= 8; row++){
+//        for(int col =  1; col <= 8; col++){
+//            ChessPosition position = new ChessPosition(row, col); // current square
+//            ChessPiece piece = board.getPiece(position); // what piece is at the square
+//            if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
+//                if (canCaptureKing(piece.pieceMoves(board, position), kingPosition)) {
+//                    return true;
+//                }
+//            }
+//
+//        }
+//    }
+//    return false; // no pieces can capture the king in their current location
+//}
+//
+//private boolean theoreticalIsInCheck(TeamColor teamColor, ChessBoard localBoard) {
+//    ChessPosition kingPosition = findKing(teamColor, localBoard);
+//    // iterate through the whole board
+//    for(int row =  1; row <= 8; row++){
+//        for(int col =  1; col <= 8; col++){
+//            ChessPosition position = new ChessPosition(row, col); // current square
+//            ChessPiece piece = localBoard.getPiece(position); // what piece is at the square
+//            if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
+//                Collection<ChessMove> allMoves = piece.pieceMoves(localBoard, position);
+//                if (canCaptureKing(allMoves, kingPosition)) {
+//                    return true;
+//                }
+//            }
+//
+//        }
+//    }
+//    return false; // no pieces can capture the king
+//}
