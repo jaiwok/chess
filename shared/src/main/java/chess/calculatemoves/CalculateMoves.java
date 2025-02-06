@@ -134,7 +134,7 @@ public class CalculateMoves {
                 if(row == currentRow && col == currentCol){
                     continue;
                 } else if (!checkSpot(row, col, myList)){
-                    break;
+                    continue;
                 }
             }
         }
