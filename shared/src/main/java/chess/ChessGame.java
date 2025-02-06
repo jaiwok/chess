@@ -5,7 +5,8 @@ import java.util.ArrayList;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
-import static chess.ChessPiece.PieceType.KING;
+import static chess.ChessPiece.PieceType.*;
+import static java.lang.Math.abs;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -16,13 +17,28 @@ import static chess.ChessPiece.PieceType.KING;
 public class ChessGame {
     private TeamColor currentTeam;
     private ChessBoard board;
-    boolean gameOver;
+
+    //Extra credit
+    private boolean whiteKingMoved, blackKingMoved;
+    private boolean blackRook1Moved, blackRook2Moved;
+    private boolean whiteRook1Moved, whiteRook2Moved;
+    private boolean pawnMoved2Spots;
+    private ChessPosition pawnMovement;
+
 
     public ChessGame() {
         this.board = new ChessBoard();
         this.board.resetBoard();
         this.currentTeam = WHITE;
-        this.gameOver = false;
+
+        this.whiteKingMoved = false;
+        this.blackKingMoved = false;
+        this.blackRook1Moved = false;
+        this.blackRook2Moved = false;
+        this.whiteRook1Moved = false;
+        this.whiteRook2Moved = false;
+        this.pawnMoved2Spots = false;
+        pawnMovement = null;
     }
 
     /**
@@ -82,7 +98,20 @@ public class ChessGame {
             }
         }
 
-        //also add moves for en pass aunt and castling
+        if(piece.getPieceType() == KING && color == WHITE && !whiteKingMoved && (!whiteRook1Moved || !whiteRook2Moved)){
+            //TODO
+            //call generic function to add castling
+
+        } else if (piece.getPieceType() == KING && color == BLACK && !blackKingMoved && (!blackRook1Moved || !blackRook2Moved)) {
+            //TODO
+            //call generic function to add castling
+        }
+        if(piece.getPieceType() == PAWN && pawnMoved2Spots && startPosition.getRow() == pawnMovement.getRow() && (abs(startPosition.getColumn() - pawnMovement.getColumn()) == 1)){
+            //TODO
+            ChessPosition end = new ChessPosition(color==WHITE ? startPosition.getRow()+1:startPosition.getRow()-1, pawnMovement.getColumn() );
+            ChessMove enPassAunt = new ChessMove(startPosition, end, null);
+            filteredMoves.add(enPassAunt);
+        }
 
         return filteredMoves;
     }
@@ -115,6 +144,9 @@ public class ChessGame {
             //add new piece
             if(move.getPromotionPiece() == null){
                 board.addPiece(move.getEndPosition(), piece);
+
+                extraCreditMovementBoolean(move, piece, pieceColor);
+
             } else {
                 board.addPiece(move.getEndPosition(), new ChessPiece(pieceColor, move.getPromotionPiece()));
             }
@@ -124,6 +156,45 @@ public class ChessGame {
 
         } catch(Exception NullPointerException){
             throw new InvalidMoveException();
+        }
+    }
+
+    /**
+     * Sets which king and rook and pawn pieces have moved for the extra credit en pass aunt and castling
+     *
+     * @param move The move that just took place
+     * @param piece The piece that moved there
+     * @param pieceColor The color of that piece
+     */
+    private void extraCreditMovementBoolean(ChessMove move, ChessPiece piece, TeamColor pieceColor) {
+
+        if(piece.getPieceType() == KING){
+            if(pieceColor == WHITE){
+                whiteKingMoved = true;
+            }else {
+                blackKingMoved = true;
+            }
+        }
+
+        if(piece.getPieceType() == ROOK && ( move.getStartPosition().equals(new ChessPosition(1,1)) || move.getStartPosition().equals(new ChessPosition(1,8))) ){
+            if(move.getStartPosition().getColumn() == 1){
+                whiteRook1Moved = true;
+            }else{
+                whiteRook2Moved = true;
+            }
+        } else if (piece.getPieceType() == ROOK && ( move.getStartPosition().equals(new ChessPosition(1,8)) || move.getStartPosition().equals(new ChessPosition(8,8))) ) {
+            if(move.getStartPosition().getColumn() == 1){
+                blackRook1Moved = true;
+            }else{
+                blackRook2Moved = true;
+            }
+        }
+        if(piece.getPieceType() == PAWN && (abs(move.getStartPosition().getRow() - move.getEndPosition().getRow()) == 2)){
+            pawnMoved2Spots = true;
+            pawnMovement = move.getEndPosition();
+        } else if (piece.getPieceType() == PAWN) {
+            pawnMoved2Spots = false;
+            pawnMovement = null;
         }
     }
 
