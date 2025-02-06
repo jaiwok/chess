@@ -68,15 +68,14 @@ public class ChessGame {
             ChessPosition start = move.getStartPosition();
             ChessPosition end   = move.getEndPosition();
 
+            //Theoretical movement as if movements allows my king to be in check then that's bad
             testBoard.addPiece(start, null);
-            testBoard.addPiece(end, piece); //do I need to worry about promotions here?
+            testBoard.addPiece(end, piece);
             if(!isInCheck(color, testBoard)){
                 filteredMoves.add(move);
             }
         }
-
-
-        //need to filter this for valid moves that prevent check/checkmate
+        
         //also add moves for en passaunt and castling
 
         return filteredMoves;
@@ -133,15 +132,69 @@ public class ChessGame {
     }
 
     /**
-     * Determines if the given team is in check
+     * Determines if the given team is in check with potential move on a new board
      *
-     * @param teamColor which team to check for check
+     * @param color which team to check for check
      * @param testBoard deep copy of currentGame
      * @return True if the specified team is in check
      */
     private boolean isInCheck(TeamColor color, ChessBoard testBoard) {
-        throw new RuntimeException("Not Implemented");
+        ChessPosition myKingLocation = findKing(color, testBoard);
+        for (int i = 0; i <=8 ; i++) {
+            for (int j = 0; j <=8 ; j++) {
+                ChessPosition pos = new ChessPosition(i, j);
+                ChessPiece piece = board.getPiece(pos);
+                if(piece !=null && piece.getTeamColor() != color){
+                    Collection<ChessMove> possibleMoves = piece.pieceMoves(testBoard, pos);
+                    if (kingInDanger(possibleMoves, myKingLocation)) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+        return false; //My king was not in danger
     }
+
+    /**
+     * Determines if a king is in danger from the other teams possible moves
+     *
+     * @param possibleMoves moves possible by a piece on the other team
+     * @param myKingLocation location of my King to check if is in danger
+     * @return boolean  King is in danger or no
+     */
+    private boolean kingInDanger(Collection<ChessMove> possibleMoves, ChessPosition myKingLocation){
+        for (ChessMove move: possibleMoves){
+            if(move.getEndPosition().equals(myKingLocation)){
+                return true;
+            }
+        }
+        return false; //King is safe
+    }
+
+    /**
+     * Finds a teams king
+     *
+     * @param color the team to find the king of
+     * @param board the board to find the king in
+     * @return ChessPosition of the king or null
+     */
+    private ChessPosition findKing(TeamColor color, ChessBoard board){
+        ChessPiece thisKing = new ChessPiece(color, KING);
+
+        for (int i = 0; i <=8 ; i++) {
+            for (int j = 0; j <=8 ; j++) {
+                ChessPosition pos = new ChessPosition(i, j);
+                ChessPiece piece = board.getPiece(pos);
+                if (piece != null && piece.equals(thisKing)){
+                    return pos;
+                }
+            }
+        }
+        return null; //If no king found then you done messed up
+    }
+
+
     /**
      * Determines if the given team is in checkmate
      *
@@ -200,42 +253,3 @@ public class ChessGame {
         return newBoard;
     }
 }
-
-//
-//public boolean isInCheck(TeamColor teamColor) {
-//
-//    ChessPosition kingPosition = findKing(teamColor, board);
-//    // iterate through the whole board
-//    for(int row =  1; row <= 8; row++){
-//        for(int col =  1; col <= 8; col++){
-//            ChessPosition position = new ChessPosition(row, col); // current square
-//            ChessPiece piece = board.getPiece(position); // what piece is at the square
-//            if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
-//                if (canCaptureKing(piece.pieceMoves(board, position), kingPosition)) {
-//                    return true;
-//                }
-//            }
-//
-//        }
-//    }
-//    return false; // no pieces can capture the king in their current location
-//}
-//
-//private boolean theoreticalIsInCheck(TeamColor teamColor, ChessBoard localBoard) {
-//    ChessPosition kingPosition = findKing(teamColor, localBoard);
-//    // iterate through the whole board
-//    for(int row =  1; row <= 8; row++){
-//        for(int col =  1; col <= 8; col++){
-//            ChessPosition position = new ChessPosition(row, col); // current square
-//            ChessPiece piece = localBoard.getPiece(position); // what piece is at the square
-//            if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
-//                Collection<ChessMove> allMoves = piece.pieceMoves(localBoard, position);
-//                if (canCaptureKing(allMoves, kingPosition)) {
-//                    return true;
-//                }
-//            }
-//
-//        }
-//    }
-//    return false; // no pieces can capture the king
-//}
