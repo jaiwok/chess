@@ -69,11 +69,6 @@ public class ChessGame {
 
         for(ChessMove move : possibleMoves){
 
-
-            if(move.getEndPosition().getRow() == 5 && move.getEndPosition().getColumn() ==2){
-                System.out.println(move.toString());
-            }
-
             ChessBoard testBoard = duplicateBoard();
 
             ChessPosition start = move.getStartPosition();
@@ -87,7 +82,7 @@ public class ChessGame {
             }
         }
 
-        //also add moves for en passaunt and castling
+        //also add moves for en pass aunt and castling
 
         return filteredMoves;
     }
@@ -153,11 +148,9 @@ public class ChessGame {
         ChessPosition myKingLocation = findKing(color, testBoard);
         for (int i = 1; i <=8 ; i++) {
             for (int j = 1; j <=8 ; j++) {
-                if (i == 5 && j == 1){
-                    System.out.println("Found my king");
-                }
+
                 ChessPosition pos = new ChessPosition(i, j);
-                ChessPiece piece = board.getPiece(pos);
+                ChessPiece piece = testBoard.getPiece(pos);
                 if(piece !=null && piece.getTeamColor() != color){
                     Collection<ChessMove> possibleMoves = piece.pieceMoves(testBoard, pos);
                     if (kingInDanger(possibleMoves, myKingLocation)) {
@@ -205,7 +198,7 @@ public class ChessGame {
                 }
             }
         }
-        return null; //If no king found then you done messed up
+        return null; //If no king is found then you messed up
     }
 
 
@@ -216,7 +209,24 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if(!isInCheck(teamColor)){
+            return false;
+        }
+
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(pos);
+                if(piece != null && piece.getTeamColor() == teamColor){
+                    Collection<ChessMove> moveToFreeKing = validMoves(pos);
+                    if(!moveToFreeKing.isEmpty()){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -236,17 +246,28 @@ public class ChessGame {
 
         for (int i = 1; i < 9 ; i++) {
             for (int j = 1; j < 9 ; j++) {
-                ChessPosition pos = new ChessPosition(i, j);
+                ChessPosition pos = newPosition(i,j);
                 ChessPiece piece = board.getPiece(pos);
                 if(piece !=null && piece.getTeamColor() == teamColor){
-                    Collection<ChessMove> possibleMoves = piece.pieceMoves(board, pos);
-                    if (possibleMoves == null) {
-                        return true;
+                    Collection<ChessMove> possibleMoves = validMoves(pos);
+                    if (!possibleMoves.isEmpty()) {
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        return true; //if all piece possible moves comes back empty then it's Stalemate
+    }
+
+    /**
+     * Helper function to get rid of duplicate code
+     *
+     * @param row row for new position
+     * @param col column for new position
+     * @return the new ChessPosition object
+     */
+    private ChessPosition newPosition(int row,int col){
+        return new ChessPosition(row, col);
     }
 
     /**
