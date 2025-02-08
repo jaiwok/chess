@@ -101,10 +101,12 @@ public class ChessGame {
         if(piece.getPieceType() == KING && color == WHITE && !whiteKingMoved && (!whiteRook1Moved || !whiteRook2Moved)){
             //TODO
             //call generic function to add castling
+            castlingCheck();
 
         } else if (piece.getPieceType() == KING && color == BLACK && !blackKingMoved && (!blackRook1Moved || !blackRook2Moved)) {
             //TODO
             //call generic function to add castling
+            castlingCheck();
         }
         if(piece.getPieceType() == PAWN && pawnMoved2Spots && startPosition.getRow() == pawnMovement.getRow() && (abs(startPosition.getColumn() - pawnMovement.getColumn()) == 1)){
             //TODO
@@ -114,6 +116,10 @@ public class ChessGame {
         }
 
         return filteredMoves;
+    }
+
+    private ChessMove castlingCheck(){
+        return new ChessMove(new  ChessPosition(1,1), new ChessPosition(1,2), null);
     }
 
     /**
@@ -140,11 +146,19 @@ public class ChessGame {
 
             //remove piece
             board.addPiece(move.getStartPosition(), null);
-
             //add new piece
             if(move.getPromotionPiece() == null){
                 board.addPiece(move.getEndPosition(), piece);
 
+                //if it was an enpassant move remove other pawn
+                if(piece.getPieceType() == PAWN && move.getStartPosition().getColumn() != move.getEndPosition().getColumn()){
+                    ChessPosition clearPawn = new ChessPosition(move.getEndPosition().getRow()+1, move.getEndPosition().getColumn());
+                    board.addPiece(clearPawn, null);
+                    clearPawn = new ChessPosition(move.getEndPosition().getRow()-1, move.getEndPosition().getColumn());
+                    board.addPiece(clearPawn, null);
+                }
+
+                //determins if king or Roooks have moved or if a pawn has moved two spots
                 extraCreditMovementBoolean(move, piece, pieceColor);
 
             } else {
