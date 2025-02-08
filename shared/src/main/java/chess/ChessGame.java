@@ -98,17 +98,15 @@ public class ChessGame {
             }
         }
 
-        if(piece.getPieceType() == PAWN && pawnMoved2Spots && startPosition.getRow() == pawnMovement.getRow() && (abs(startPosition.getColumn() - pawnMovement.getColumn()) == 1)){
-            ChessPosition end = new ChessPosition(color==WHITE ? startPosition.getRow()+1:startPosition.getRow()-1, pawnMovement.getColumn() );
-            ChessMove enPassAunt = new ChessMove(startPosition, end, null);
-            filteredMoves.add(enPassAunt);
+        if(piece.getPieceType() == PAWN && pawnMoved2Spots){
+            if(startPosition.getRow() == pawnMovement.getRow() && (abs(startPosition.getColumn() - pawnMovement.getColumn()) == 1)) {
+                ChessPosition end = new ChessPosition(color == WHITE ? startPosition.getRow() + 1 : startPosition.getRow() - 1, pawnMovement.getColumn());
+                ChessMove enPassAunt = new ChessMove(startPosition, end, null);
+                filteredMoves.add(enPassAunt);
+            }
         }
 
         return filteredMoves;
-    }
-
-    private ChessMove castlingCheck(){
-        return new ChessMove(new  ChessPosition(1,1), new ChessPosition(1,2), null);
     }
 
     /**
