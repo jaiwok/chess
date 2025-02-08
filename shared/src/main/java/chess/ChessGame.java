@@ -19,9 +19,6 @@ public class ChessGame {
     private ChessBoard board;
 
     //Extra credit
-    private boolean whiteKingMoved, blackKingMoved;
-    private boolean blackRook1Moved, blackRook2Moved;
-    private boolean whiteRook1Moved, whiteRook2Moved;
     private boolean pawnMoved2Spots;
     private ChessPosition pawnMovement;
 
@@ -31,12 +28,6 @@ public class ChessGame {
         this.board.resetBoard();
         this.currentTeam = WHITE;
 
-        this.whiteKingMoved = false;
-        this.blackKingMoved = false;
-        this.blackRook1Moved = false;
-        this.blackRook2Moved = false;
-        this.whiteRook1Moved = false;
-        this.whiteRook2Moved = false;
         this.pawnMoved2Spots = false;
         pawnMovement = null;
     }
@@ -138,7 +129,7 @@ public class ChessGame {
             if(move.getPromotionPiece() == null){
                 board.addPiece(move.getEndPosition(), piece);
 
-                //if it was an enpassant move remove other pawn
+                //if it was an in passant move remove other pawn
                 if(piece.getPieceType() == PAWN && move.getStartPosition().getColumn() != move.getEndPosition().getColumn()){
                     ChessPosition clearPawn = new ChessPosition(move.getEndPosition().getRow()+1, move.getEndPosition().getColumn());
                     board.addPiece(clearPawn, null);
@@ -147,7 +138,7 @@ public class ChessGame {
                 }
 
                 //determine pawn has moved two spots
-                extraCreditMovementBoolean(move, piece, pieceColor);
+                extraCreditMovementBoolean(move, piece);
 
             } else {
                 board.addPiece(move.getEndPosition(), new ChessPiece(pieceColor, move.getPromotionPiece()));
@@ -166,9 +157,8 @@ public class ChessGame {
      *
      * @param move The move that just took place
      * @param piece The piece that moved there
-     * @param pieceColor The color of that piece
      */
-    private void extraCreditMovementBoolean(ChessMove move, ChessPiece piece, TeamColor pieceColor) {
+    private void extraCreditMovementBoolean(ChessMove move, ChessPiece piece) {
 
         if(piece.getPieceType() == PAWN && (abs(move.getStartPosition().getRow() - move.getEndPosition().getRow()) == 2)){
             pawnMoved2Spots = true;
