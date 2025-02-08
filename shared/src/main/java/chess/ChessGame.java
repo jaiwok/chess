@@ -100,7 +100,8 @@ public class ChessGame {
 
         if(piece.getPieceType() == PAWN && pawnMoved2Spots){
             if(startPosition.getRow() == pawnMovement.getRow() && (abs(startPosition.getColumn() - pawnMovement.getColumn()) == 1)) {
-                ChessPosition end = new ChessPosition(color == WHITE ? startPosition.getRow() + 1 : startPosition.getRow() - 1, pawnMovement.getColumn());
+                int rowOffset = color == WHITE ? startPosition.getRow() + 1 : startPosition.getRow() - 1;
+                ChessPosition end = new ChessPosition(rowOffset, pawnMovement.getColumn());
                 ChessMove enPassAunt = new ChessMove(startPosition, end, null);
                 filteredMoves.add(enPassAunt);
             }
