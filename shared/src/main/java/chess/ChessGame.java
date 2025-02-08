@@ -98,18 +98,7 @@ public class ChessGame {
             }
         }
 
-        if(piece.getPieceType() == KING && color == WHITE && !whiteKingMoved && (!whiteRook1Moved || !whiteRook2Moved)){
-            //TODO
-            //call generic function to add castling
-            castlingCheck();
-
-        } else if (piece.getPieceType() == KING && color == BLACK && !blackKingMoved && (!blackRook1Moved || !blackRook2Moved)) {
-            //TODO
-            //call generic function to add castling
-            castlingCheck();
-        }
         if(piece.getPieceType() == PAWN && pawnMoved2Spots && startPosition.getRow() == pawnMovement.getRow() && (abs(startPosition.getColumn() - pawnMovement.getColumn()) == 1)){
-            //TODO
             ChessPosition end = new ChessPosition(color==WHITE ? startPosition.getRow()+1:startPosition.getRow()-1, pawnMovement.getColumn() );
             ChessMove enPassAunt = new ChessMove(startPosition, end, null);
             filteredMoves.add(enPassAunt);
@@ -158,7 +147,7 @@ public class ChessGame {
                     board.addPiece(clearPawn, null);
                 }
 
-                //determins if king or Roooks have moved or if a pawn has moved two spots
+                //determine pawn has moved two spots
                 extraCreditMovementBoolean(move, piece, pieceColor);
 
             } else {
@@ -182,27 +171,6 @@ public class ChessGame {
      */
     private void extraCreditMovementBoolean(ChessMove move, ChessPiece piece, TeamColor pieceColor) {
 
-        if(piece.getPieceType() == KING){
-            if(pieceColor == WHITE){
-                whiteKingMoved = true;
-            }else {
-                blackKingMoved = true;
-            }
-        }
-
-        if(piece.getPieceType() == ROOK && ( move.getStartPosition().equals(new ChessPosition(1,1)) || move.getStartPosition().equals(new ChessPosition(1,8))) ){
-            if(move.getStartPosition().getColumn() == 1){
-                whiteRook1Moved = true;
-            }else{
-                whiteRook2Moved = true;
-            }
-        } else if (piece.getPieceType() == ROOK && ( move.getStartPosition().equals(new ChessPosition(1,8)) || move.getStartPosition().equals(new ChessPosition(8,8))) ) {
-            if(move.getStartPosition().getColumn() == 1){
-                blackRook1Moved = true;
-            }else{
-                blackRook2Moved = true;
-            }
-        }
         if(piece.getPieceType() == PAWN && (abs(move.getStartPosition().getRow() - move.getEndPosition().getRow()) == 2)){
             pawnMoved2Spots = true;
             pawnMovement = move.getEndPosition();
