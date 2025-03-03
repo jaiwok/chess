@@ -5,19 +5,14 @@ import model.AuthData;
 import dataaccess.UserDataAccess;
 import model.UserData;
 import dataaccess.DataAccessException;
-//import service.exceptions.AlreadyTakenException;
-//import service.exceptions.BadRequestException;
-//import service.exceptions.UnauthorizedException;
-
-import java.sql.SQLException;
 
 public class UserService {
     private final UserDataAccess userClass;
     private final AuthDataAccess authClass;
 
     public UserService(UserDataAccess u, AuthDataAccess a) {
-        this.userClass = u;
-        this.authClass = a;
+        userClass = u;
+        authClass = a;
     }
 
     /**
