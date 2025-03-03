@@ -9,7 +9,7 @@ public interface UserDataAccess {
     void clear() throws DataAccessException;
 
     /**
-     * Creates a new user
+     * Add userData object
      *
      * @param user the new user
      */

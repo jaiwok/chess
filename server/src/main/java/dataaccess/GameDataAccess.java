@@ -10,9 +10,9 @@ public interface GameDataAccess {
     void clear() throws DataAccessException;
 
     /**
-     * Creates a new game
+     * Adds gameData object
      *
-     * @param game the game to create
+     * @param game object to add
      */
     void add(GameData game) throws DataAccessException;
 
@@ -39,12 +39,10 @@ public interface GameDataAccess {
     /**
      * adds a player to the game
      *
-     * @param color
-     * @param username
-     * @param gameId
+     * @param username username of player to add to game
+     * @param gameId which game for player to join
+     * @param color which color user will be in game
      */
-    void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException;
-
-    void updateGame(GameData game) throws DataAccessException;
+    void joinGame( String username, int gameId, ChessGame.TeamColor color) throws DataAccessException;
 
 }
