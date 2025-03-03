@@ -27,9 +27,10 @@ public class UserDataStorage implements UserDataAccess {
 
         if(getUser(username) == null){
             usersMap.put(newUser.username(), newUser);
-        } else{
-            throw new DataAccessException("Error: Username is already in use");
         }
+//        else{
+//            throw new DataAccessException("Error: Username is already in use");
+//        }
     }
 
     /**

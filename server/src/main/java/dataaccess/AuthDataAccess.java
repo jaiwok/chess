@@ -16,13 +16,13 @@ public interface AuthDataAccess {
      */
     void add(AuthData authData) throws DataAccessException;
 
-    /**
-     * finds and returns authData of a user
-     *
-     * @param username name of the user's authentication data
-     * @return the authentication data
-     */
-    AuthData findAuthFromUsername(String username) throws DataAccessException;
+//    /**
+//     * finds and returns authData of a user
+//     *
+//     * @param username name of the user's authentication data
+//     * @return the authentication data
+//     */
+//    AuthData findAuthFromUsername(String username) throws DataAccessException;
 
     /**
      * retrieves a user's auth data with the given token
