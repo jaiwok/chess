@@ -9,6 +9,7 @@ import spark.Route;
 
 import service.GameService;
 import service.exceptions.*;
+import model.returnobjects.GameId;
 
 public class CreateNewGameHandler implements Route {
     private final GameService gameService;
@@ -40,7 +41,7 @@ public class CreateNewGameHandler implements Route {
 
             res.type("application/json");
             res.status(200);
-            return json.toJson(id);
+            return json.toJson(new GameId(id));
 
         } catch (UnauthorizedUserException e) {
 

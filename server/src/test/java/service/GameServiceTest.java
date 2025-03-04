@@ -49,11 +49,12 @@ class GameServiceTest {
 
     @Test
     public void testValidAddGame() throws DataAccessException, UnauthorizedUserException, FaultyRequestException, NameAlreadyInUseException {
-        int newGameID = gameService.addGame(authToken, "correct game name");
-        int expectedGameID = 0;
+        int id = gameService.addGame(authToken, "correct game name");
+        int expected = 1;
 
-        assertEquals(expectedGameID, newGameID);
-        assertEquals(1, List.of(gameService.listGames(authToken)).size());
+        assertEquals(expected, id);
+        gameService.addGame(authToken, "other game name");
+        assertEquals(2, List.of(gameService.listGames(authToken)).size());
     }
 
     @Test
@@ -80,6 +81,6 @@ class GameServiceTest {
 
         gameService.joinGame(authToken, id, color);
         assertThrows(NameAlreadyInUseException.class, () ->{gameService.joinGame(authToken, id, color);});
-        assertThrows(FaultyRequestException.class, () -> {gameService.joinGame(authToken, 1, color);});
+        assertThrows(FaultyRequestException.class, () -> {gameService.joinGame(authToken, 2, color);});
     }
 }

@@ -12,8 +12,6 @@ import service.GameService;
 import service.exceptions.*;
 
 
-
-
 public class JoinGameHandler implements Route {
     private final GameService gameService;
 
@@ -31,8 +29,12 @@ public class JoinGameHandler implements Route {
         JsonObject jsonObject = JsonParser.parseString(req.body()).getAsJsonObject();
 
         try{
-            id = jsonObject.get("gameID").getAsInt();
-            color = ChessGame.TeamColor.valueOf(jsonObject.get("playerColor").getAsString());
+            try {
+                id = jsonObject.get("gameID").getAsInt();
+                color = ChessGame.TeamColor.valueOf(jsonObject.get("playerColor").getAsString());
+            } catch (Exception e){
+                throw new FaultyRequestException("Error: Issue with passed gameID or playerColor");
+            }
 
             if(authToken == null || authToken.isEmpty()){
                 throw new UnauthorizedUserException("Error: Unauthorized");

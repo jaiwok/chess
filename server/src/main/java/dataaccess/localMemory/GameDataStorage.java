@@ -7,7 +7,6 @@ import model.GameData;
 import java.util.HashMap;
 
 public class GameDataStorage implements GameDataAccess{
-    //key will be the game id
     final private HashMap<Integer, GameData> gamesMap = new HashMap<>();
 
     /**

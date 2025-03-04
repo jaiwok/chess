@@ -53,7 +53,7 @@ class UserServiceTest {
 
     @Test
     void testInvalidLogin() throws DataAccessException, UnauthorizedUserException, FaultyRequestException, NameAlreadyInUseException {
-         assertThrows(FaultyRequestException.class, () -> new UserService(userDataAObject, authDataAObject).login(user.username(), user.password()));
+         assertThrows(UnauthorizedUserException.class, () -> new UserService(userDataAObject, authDataAObject).login(user.username(), user.password()));
     }
 
     @Test

@@ -4,12 +4,13 @@ import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import java.util.List;
 
+import model.returnobjects.GameList;
 import model.GameData;
 import service.GameService;
 import service.exceptions.*;
 
-import java.util.List;
 
 public class ListGamesHandler implements Route {
     private final GameService gameService;
@@ -31,11 +32,11 @@ public class ListGamesHandler implements Route {
                 throw new UnauthorizedUserException("Error: Unauthorized");
             }
 
-            List<GameData> allGames = List.of(gameService.listGames(authToken));
+            GameData[] gamesArray = gameService.listGames(authToken);
 
             res.type("application/json");
             res.status(200);
-            return json.toJson(allGames);
+            return json.toJson(new GameList(gamesArray));
 
         } catch (UnauthorizedUserException e) {
 

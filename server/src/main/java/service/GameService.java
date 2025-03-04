@@ -37,12 +37,12 @@ public class GameService {
      * @param name string of what the new chess game will be called
      * @return the integer ID of the new game
      */
-    public int addGame(String authToken, String name) throws DataAccessException, UnauthorizedUserException, NameAlreadyInUseException{
+    public int addGame(String authToken, String name) throws DataAccessException, UnauthorizedUserException, FaultyRequestException{
         if(authClass.findAuthDataByToken(authToken) !=  null) {
             if(name != null) {
                 return gameClass.createGame(name);
             } else{
-                throw new NameAlreadyInUseException("Error: Invalid name");
+                throw new FaultyRequestException("Error: Invalid name");
             }
         } else {
             throw new UnauthorizedUserException("Error: Unauthorized");
