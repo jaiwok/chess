@@ -1,7 +1,6 @@
-package dataaccess.localMemory;
+package dataaccess.localmemory;
 
 import dataaccess.AuthDataAccess;
-import dataaccess.DataAccessException;
 import model.AuthData;
 
 import java.util.HashMap;

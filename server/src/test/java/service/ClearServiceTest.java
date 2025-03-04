@@ -6,13 +6,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import chess.ChessGame;
 import dataaccess.*;
-import dataaccess.localMemory.*;
+import dataaccess.localmemory.*;
 import model.*;
+import service.exceptions.NameAlreadyInUseException;
 
 class ClearServiceTest {
 
     @Test
-    void testClearService() throws DataAccessException {
+    void testClearService() throws DataAccessException, NameAlreadyInUseException {
         AuthDataAccess authDataAObject = new AuthDataStorage();
         GameDataAccess gameDataAObject = new GameDataStorage();
         UserDataAccess userDataAObject = new UserDataStorage();

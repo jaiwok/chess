@@ -1,4 +1,4 @@
-package dataaccess.localMemory;
+package dataaccess.localmemory;
 
 import chess.ChessGame;
 import dataaccess.DataAccessException;
@@ -72,11 +72,6 @@ public class GameDataStorage implements GameDataAccess{
 
         gamesMap.put(gameId, joinedGame);
     }
-
-    public void updatedGame(GameData game) throws DataAccessException{
-        gamesMap.put(game.gameID(), game);
-    }
-
 
     private int generateId() {
         int id = 1;

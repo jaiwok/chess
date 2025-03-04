@@ -9,7 +9,7 @@ import java.util.List;
 import chess.ChessGame;
 import dataaccess.*;
 import dataaccess.DataAccessException;
-import dataaccess.localMemory.*;
+import dataaccess.localmemory.*;
 import model.*;
 import service.exceptions.*;
 

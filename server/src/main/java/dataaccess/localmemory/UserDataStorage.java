@@ -1,8 +1,9 @@
-package dataaccess.localMemory;
+package dataaccess.localmemory;
 
-import dataaccess.DataAccessException;
 import dataaccess.UserDataAccess;
 import model.UserData;
+import service.exceptions.NameAlreadyInUseException;
+
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -21,16 +22,16 @@ public class UserDataStorage implements UserDataAccess {
      *
      * @param user the new user
      */
-    public void add(UserData user) {
+    public void add(UserData user) throws NameAlreadyInUseException {
         String username = user.username();
         UserData newUser = new UserData(username, user.password(), user.email());
 
         if(getUser(username) == null){
             usersMap.put(newUser.username(), newUser);
         }
-//        else{
-//            throw new DataAccessException("Error: Username is already in use");
-//        }
+        else{
+            throw new NameAlreadyInUseException("Error: Username is already in use");
+        }
     }
 
     /**

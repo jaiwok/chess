@@ -1,6 +1,7 @@
 package dataaccess;
 
 import model.UserData;
+import service.exceptions.NameAlreadyInUseException;
 
 public interface UserDataAccess {
     /**
@@ -13,7 +14,7 @@ public interface UserDataAccess {
      *
      * @param user the new user
      */
-    void add(UserData user) throws DataAccessException;
+    void add(UserData user) throws DataAccessException, NameAlreadyInUseException;
 
     /**
      * retrieves userdata for the given username

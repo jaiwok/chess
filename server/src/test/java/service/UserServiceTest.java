@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dataaccess.*;
-import dataaccess.localMemory.*;
+import dataaccess.localmemory.*;
 import model.*;
 import service.exceptions.*;
 
@@ -53,7 +53,8 @@ class UserServiceTest {
 
     @Test
     void testInvalidLogin() throws DataAccessException, UnauthorizedUserException, FaultyRequestException, NameAlreadyInUseException {
-         assertThrows(UnauthorizedUserException.class, () -> new UserService(userDataAObject, authDataAObject).login(user.username(), user.password()));
+         assertThrows(UnauthorizedUserException.class, () ->
+                 new UserService(userDataAObject, authDataAObject).login(user.username(), user.password()));
     }
 
     @Test

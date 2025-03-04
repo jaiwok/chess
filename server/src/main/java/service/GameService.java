@@ -56,7 +56,8 @@ public class GameService {
      * @param id the game you want to join
      * @param color team to join the game as
      */
-    public void joinGame(String authToken, int id, chess.ChessGame.TeamColor color) throws  DataAccessException,FaultyRequestException, NameAlreadyInUseException, UnauthorizedUserException{
+    public void joinGame(String authToken, int id, chess.ChessGame.TeamColor color)
+            throws  DataAccessException, FaultyRequestException, NameAlreadyInUseException, UnauthorizedUserException{
 
         if(authClass.findAuthDataByToken(authToken) !=  null) {
             GameData game = gameClass.getGameData(id);
