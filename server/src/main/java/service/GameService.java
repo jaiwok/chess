@@ -62,7 +62,7 @@ public class GameService {
             
             if(game != null){
                 
-                if(colorAvailable(game,color)){
+                if(colorisFree(game,color)){
                     
                     String username = authClass.findAuthDataByToken(authToken).username();
                     gameClass.joinGame(username, id, color);
@@ -85,7 +85,7 @@ public class GameService {
      * @param color color user wants to be
      * @return if the color is free
      */
-    private boolean colorAvailable(GameData game, ChessGame.TeamColor color) {
+    private boolean colorisFree(GameData game, ChessGame.TeamColor color) {
 
         return color == ChessGame.TeamColor.WHITE ? game.whiteUsername() == null :
                                                     game.blackUsername() == null;
