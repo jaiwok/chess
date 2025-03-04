@@ -1,10 +1,8 @@
 package service;
 
-import dataaccess.AuthDataAccess;
-import model.AuthData;
-import dataaccess.UserDataAccess;
-import model.UserData;
-import dataaccess.DataAccessException;
+import dataaccess.*;
+import model.*;
+import service.exceptions.*;
 
 public class UserService {
     private final UserDataAccess userClass;
@@ -22,7 +20,7 @@ public class UserService {
      * @return an auth token associated with the new user
      * @throws DataAccessException Error to throw if bad user, or username in use
      */
-    public AuthData register(UserData user) throws DataAccessException{
+    public AuthData register(UserData user) throws DataAccessException, NameAlreadyInUseException, FaultyRequestException{
         AuthData authData;
 
         if(user != null && user.username() != null && user.password() != null) {
@@ -34,10 +32,10 @@ public class UserService {
 
                 return authData;
             } else {
-                throw new DataAccessException("Error: Username already taken");
+                throw new NameAlreadyInUseException("Error: Username already taken");
             }
         } else {
-            throw new DataAccessException("Error: Bad register user request");
+            throw new FaultyRequestException("Error: Bad register user request");
         }
     }
 
@@ -48,7 +46,7 @@ public class UserService {
      * @param password password to log in with
      * @return a new auth token associated with this user
      */
-    public AuthData login(String username, String password) throws DataAccessException {
+    public AuthData login(String username, String password) throws DataAccessException, UnauthorizedUserException, FaultyRequestException{
         AuthData authData;
 
         if (username != null && password != null) {
@@ -59,10 +57,10 @@ public class UserService {
 
                 return authData;
             } else{
-                throw new DataAccessException("Error: Unauthorized");
+                throw new UnauthorizedUserException("Error: Unauthorized");
             }
         } else{
-            throw new DataAccessException("Error: Bad login user request");
+            throw new FaultyRequestException("Error: Bad login user request");
         }
     }
 
@@ -71,12 +69,12 @@ public class UserService {
      *
      * @param authToken the auth token belonging to the user
      */
-    public void logout(String authToken) throws DataAccessException {
+    public void logout(String authToken) throws DataAccessException, UnauthorizedUserException {
 
         if (authClass.findAuthDataByToken(authToken) != null) {
             authClass.remove(authToken);
         } else {
-            throw new DataAccessException("Error: Unauthorized");
+            throw new UnauthorizedUserException("Error: Unauthorized");
         }
     }
 }

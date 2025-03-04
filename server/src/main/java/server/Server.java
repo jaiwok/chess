@@ -1,5 +1,10 @@
 package server;
 
+import com.google.gson.Gson;
+import dataaccess.*;
+import dataaccess.localMemory.*;
+import  service.*;
+import service.exceptions.*;
 import spark.*;
 
 public class Server {
@@ -11,11 +16,49 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
 
+        UserDataAccess userClass = new UserDataStorage();
+        AuthDataAccess authClass = new AuthDataStorage();
+        GameDataAccess gameClass = new GameDataStorage();
+
+        ClearService clearService = new ClearService(userClass, authClass, gameClass);
+        UserService userService = new UserService(userClass, authClass);
+        GameService gameService = new GameService(authClass, gameClass);
+
+        Gson gson = new Gson();
+
+        Spark.before("/session", (request, response) -> {
+            if (request.requestMethod().equals("DELETE")) {
+                String authToken = request.headers("authorization");
+                if (!authorized(authToken, authClass)) {
+                    Spark.halt(401,  gson.toJson(new ErrorMsg("Error: Unauthorized")));
+                }
+            }
+        });
+
+        Spark.before("/game", (request, response) -> {
+            String authToken = request.headers("authorization");
+            if (!authorized(authToken, authClass)) {
+                Spark.halt(401,  gson.toJson(new ErrorMsg("Error: Unauthorized")));
+            }
+        });
+
+        Spark.delete("/db", new ClearHandler(clearService));
+        Spark.post("/user", new RegisterHandler(userService));
+        Spark.post("/session", new LoginHandler(userService));
+        Spark.delete("/session", new LogoutHandler(userService));
+        Spark.get("/game", new ListGamesHandler(gameService));
+        Spark.post("/game", new CreateGameHandler(gameService));
+        Spark.put("/game", new JoinGameHandler(gameService));
+
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
 
         Spark.awaitInitialization();
         return Spark.port();
+    }
+
+    private static boolean authorized(String authToken, AuthDataAccess authClass) throws DataAccessException {
+        return authToken != null && !authToken.isEmpty() && authClass.findAuthDataByToken(authToken) != null;
     }
 
     public void stop() {

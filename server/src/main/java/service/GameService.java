@@ -5,6 +5,7 @@ import dataaccess.AuthDataAccess;
 import dataaccess.GameDataAccess;
 import model.GameData;
 import dataaccess.DataAccessException;
+import service.exceptions.*;
 
 public class GameService {
     private final AuthDataAccess authClass;
@@ -21,11 +22,11 @@ public class GameService {
      * @param authToken token of signed-in user
      * @return the array of all games in the database
      */
-    public GameData[] listGames(String authToken) throws DataAccessException {
+    public GameData[] listGames(String authToken) throws DataAccessException, UnauthorizedUserException{
         if(authClass.findAuthDataByToken(authToken) !=  null){
             return gameClass.listGames();
         } else {
-            throw new DataAccessException("Error: Unauthorized");
+            throw new UnauthorizedUserException("Error: Unauthorized");
         }
     }
 
@@ -36,15 +37,15 @@ public class GameService {
      * @param name string of what the new chess game will be called
      * @return the integer ID of the new game
      */
-    public int addGame(String authToken, String name) throws DataAccessException {
+    public int addGame(String authToken, String name) throws DataAccessException, UnauthorizedUserException, NameAlreadyInUseException{
         if(authClass.findAuthDataByToken(authToken) !=  null) {
             if(name != null) {
                 return gameClass.createGame(name);
             } else{
-                throw new DataAccessException("Error: Invalid name");
+                throw new NameAlreadyInUseException("Error: Invalid name");
             }
         } else {
-            throw new DataAccessException("Error: Unauthorized");
+            throw new UnauthorizedUserException("Error: Unauthorized");
         }
     }
 
@@ -55,26 +56,26 @@ public class GameService {
      * @param id the game you want to join
      * @param color team to join the game as
      */
-    public void joinGame(String authToken, int id, chess.ChessGame.TeamColor color) throws DataAccessException {
+    public void joinGame(String authToken, int id, chess.ChessGame.TeamColor color) throws DataAccessException, NameAlreadyInUseException, UnauthorizedUserException{
 
         if(authClass.findAuthDataByToken(authToken) !=  null) {
             GameData game = gameClass.getGameData(id);
             
             if(game != null){
                 
-                if(colorisFree(game,color)){
+                if(colorIsFree(game,color)){
                     
                     String username = authClass.findAuthDataByToken(authToken).username();
                     gameClass.joinGame(username, id, color);
                     
                 } else{
-                    throw new DataAccessException("Error: Color already taken");
+                    throw new NameAlreadyInUseException("Error: Color already taken");
                 }
             } else{
                 throw new DataAccessException("Error: Invalid game ID");
             }
         } else{
-            throw new DataAccessException("Error: Unauthorized");
+            throw new UnauthorizedUserException("Error: Unauthorized");
         }
     }
 
@@ -85,7 +86,7 @@ public class GameService {
      * @param color color user wants to be
      * @return if the color is free
      */
-    private boolean colorisFree(GameData game, ChessGame.TeamColor color) {
+    private boolean colorIsFree(GameData game, ChessGame.TeamColor color) {
 
         return color == ChessGame.TeamColor.WHITE ? game.whiteUsername() == null :
                                                     game.blackUsername() == null;
