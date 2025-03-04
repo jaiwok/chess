@@ -56,7 +56,7 @@ public class GameService {
      * @param id the game you want to join
      * @param color team to join the game as
      */
-    public void joinGame(String authToken, int id, chess.ChessGame.TeamColor color) throws DataAccessException, NameAlreadyInUseException, UnauthorizedUserException{
+    public void joinGame(String authToken, int id, chess.ChessGame.TeamColor color) throws  DataAccessException,FaultyRequestException, NameAlreadyInUseException, UnauthorizedUserException{
 
         if(authClass.findAuthDataByToken(authToken) !=  null) {
             GameData game = gameClass.getGameData(id);
@@ -72,7 +72,7 @@ public class GameService {
                     throw new NameAlreadyInUseException("Error: Color already taken");
                 }
             } else{
-                throw new DataAccessException("Error: Invalid game ID");
+                throw new FaultyRequestException("Error: Invalid game ID");
             }
         } else{
             throw new UnauthorizedUserException("Error: Unauthorized");

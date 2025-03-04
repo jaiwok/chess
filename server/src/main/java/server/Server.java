@@ -5,6 +5,7 @@ import dataaccess.*;
 import dataaccess.localMemory.*;
 import  service.*;
 import service.exceptions.*;
+import server.handler.*;
 import spark.*;
 
 public class Server {
@@ -24,13 +25,13 @@ public class Server {
         UserService userService = new UserService(userClass, authClass);
         GameService gameService = new GameService(authClass, gameClass);
 
-        Gson gson = new Gson();
+        Gson json = new Gson();
 
         Spark.before("/session", (request, response) -> {
             if (request.requestMethod().equals("DELETE")) {
                 String authToken = request.headers("authorization");
                 if (!authorized(authToken, authClass)) {
-                    Spark.halt(401,  gson.toJson(new ErrorMsg("Error: Unauthorized")));
+                    Spark.halt(401,  json.toJson(new ErrorMsg("Error: Unauthorized")));
                 }
             }
         });
@@ -38,7 +39,7 @@ public class Server {
         Spark.before("/game", (request, response) -> {
             String authToken = request.headers("authorization");
             if (!authorized(authToken, authClass)) {
-                Spark.halt(401,  gson.toJson(new ErrorMsg("Error: Unauthorized")));
+                Spark.halt(401,  json.toJson(new ErrorMsg("Error: Unauthorized")));
             }
         });
 
@@ -46,8 +47,8 @@ public class Server {
         Spark.post("/user", new RegisterHandler(userService));
         Spark.post("/session", new LoginHandler(userService));
         Spark.delete("/session", new LogoutHandler(userService));
+        Spark.post("/game", new CreateNewGameHandler(gameService));
         Spark.get("/game", new ListGamesHandler(gameService));
-        Spark.post("/game", new CreateGameHandler(gameService));
         Spark.put("/game", new JoinGameHandler(gameService));
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
