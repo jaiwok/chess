@@ -42,7 +42,7 @@ public class RegisterHandler implements Route {
             res.status(403);
             return json.toJson(new ErrorMsg(e.getMessage()));
         } catch (Exception e) {
-            
+
             res.status(500);
             return json.toJson(new ErrorMsg(e.getMessage()));
         }

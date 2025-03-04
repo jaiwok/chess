@@ -25,15 +25,15 @@ public class AuthDataStorage implements AuthDataAccess {
         authMap.put(authData.authToken(), authData);
     }
 
-//    /**
-//     * finds and returns authData of a user
-//     *
-//     * @param username name of the user's authentication data
-//     * @return the authentication data
-//     */
-//    public AuthData findAuthFromUsername(String username) {
-//        return authMap.get(username);
-//    }
+    /**
+     * finds and returns authData of a user
+     *
+     * @param username name of the user's authentication data
+     * @return the authentication data
+     */
+    public AuthData findAuthFromUsername(String username) {
+        return authMap.get(username);
+    }
 
     /**
      * retrieves a user's authMap data with the given token
