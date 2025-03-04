@@ -29,18 +29,12 @@ public class Server {
 
         Spark.before("/session", (request, response) -> {
             if (request.requestMethod().equals("DELETE")) {
-                String authToken = request.headers("authorization");
-                if (!authorized(authToken, authClass)) {
-                    Spark.halt(401,  json.toJson(new ErrorMsg("Error: Unauthorized")));
-                }
+                authenticity(request, authClass, json);
             }
         });
 
         Spark.before("/game", (request, response) -> {
-            String authToken = request.headers("authorization");
-            if (!authorized(authToken, authClass)) {
-                Spark.halt(401,  json.toJson(new ErrorMsg("Error: Unauthorized")));
-            }
+            authenticity(request, authClass, json);
         });
 
         Spark.delete("/db", new ClearHandler(clearService));
@@ -56,6 +50,13 @@ public class Server {
 
         Spark.awaitInitialization();
         return Spark.port();
+    }
+
+    private static void authenticity(Request request, AuthDataAccess authClass, Gson json) throws DataAccessException {
+        String authToken = request.headers("authorization");
+        if (!authorized(authToken, authClass)) {
+            Spark.halt(401,  json.toJson(new ErrorMsg("Error: Unauthorized")));
+        }
     }
 
     private static boolean authorized(String authToken, AuthDataAccess authClass) throws DataAccessException {
