@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.*;
 import dataaccess.localmemory.*;
+import dataaccess.mysqlmemory.*;
 import  service.*;
 import service.exceptions.*;
 import server.handler.*;
@@ -15,11 +16,17 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        // Register your endpoints and handle exceptions here.
+        UserDataAccess userClass;
+        AuthDataAccess authClass;
+        GameDataAccess gameClass;
 
-        UserDataAccess userClass = new UserDataStorage();
-        AuthDataAccess authClass = new AuthDataStorage();
-        GameDataAccess gameClass = new GameDataStorage();
+        try {
+            userClass = new SQLUserData();
+            authClass = new SQLAuthData();
+            gameClass = new SQLGameData();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         ClearService clearService = new ClearService(userClass, authClass, gameClass);
         UserService userService = new UserService(userClass, authClass);
