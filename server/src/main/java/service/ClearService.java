@@ -4,6 +4,7 @@ import dataaccess.AuthDataAccess;
 import dataaccess.GameDataAccess;
 import dataaccess.UserDataAccess;
 import dataaccess.DataAccessException;
+import java.sql.SQLException;
 
 public class ClearService {
     private final AuthDataAccess authClass;
@@ -19,7 +20,7 @@ public class ClearService {
     /**
      * clears all server data
      */
-    public void clear() throws DataAccessException {
+    public void clear() throws DataAccessException, SQLException {
         authClass.clear();
         userClass.clear();
         gameClass.clear();

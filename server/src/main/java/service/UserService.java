@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 import model.*;
 import service.exceptions.*;
+import java.sql.SQLException;
 
 public class UserService {
     private final UserDataAccess userClass;
@@ -20,7 +21,7 @@ public class UserService {
      * @return an auth token associated with the new user
      * @throws DataAccessException Error to throw if bad user, or username in use
      */
-    public AuthData register(UserData user) throws DataAccessException, NameAlreadyInUseException, FaultyRequestException{
+    public AuthData register(UserData user) throws DataAccessException, NameAlreadyInUseException, FaultyRequestException, SQLException{
         AuthData authData;
 
         if(user != null && user.username() != null && user.password() != null) {
