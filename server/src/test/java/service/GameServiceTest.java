@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.SQLException;
 
 import chess.ChessGame;
 import dataaccess.*;
@@ -23,7 +24,7 @@ class GameServiceTest {
 
 
     @BeforeEach
-    public void clearBeforeTests() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException {
+    public void clearBeforeTests() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException, SQLException {
         authDataAObject = new AuthDataStorage();
         gameDataAObject = new GameDataStorage();
         userDataAObject = new UserDataStorage();
