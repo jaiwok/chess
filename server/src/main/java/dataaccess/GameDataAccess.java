@@ -2,12 +2,14 @@ package dataaccess;
 
 import chess.ChessGame;
 import model.GameData;
+import service.exceptions.FaultyRequestException;
+import java.sql.SQLException;
 
 public interface GameDataAccess {
     /**
      * Clears the database of all games
      */
-    void clear() throws DataAccessException;
+    void clear() throws DataAccessException, SQLException;
 
     /**
      * Adds gameData object
@@ -43,6 +45,6 @@ public interface GameDataAccess {
      * @param gameId which game for player to join
      * @param color which color user will be in game
      */
-    void joinGame( String username, int gameId, ChessGame.TeamColor color) throws DataAccessException;
+    void joinGame( String username, int gameId, ChessGame.TeamColor color) throws DataAccessException, FaultyRequestException;
 
 }
