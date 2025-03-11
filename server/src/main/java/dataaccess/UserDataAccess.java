@@ -3,18 +3,20 @@ package dataaccess;
 import model.UserData;
 import service.exceptions.NameAlreadyInUseException;
 
+import java.sql.SQLException;
+
 public interface UserDataAccess {
     /**
      * Clears the database of all users
      */
-    void clear() throws DataAccessException;
+    void clear() throws DataAccessException, SQLException;
 
     /**
      * Add userData object
      *
      * @param user the new user
      */
-    void add(UserData user) throws DataAccessException, NameAlreadyInUseException;
+    void add(UserData user) throws DataAccessException, NameAlreadyInUseException, SQLException;
 
     /**
      * retrieves userdata for the given username

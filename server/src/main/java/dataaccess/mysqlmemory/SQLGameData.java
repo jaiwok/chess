@@ -60,7 +60,7 @@ public class SQLGameData extends SQLInteraction implements GameDataAccess {
             }
         } catch (Exception e) {
 
-            throw new DataAccessException(String.format("Failed to get game Data: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Database access failed while getting game Data: %s", e.getMessage()));
         }
 
         return null;
@@ -96,7 +96,7 @@ public class SQLGameData extends SQLInteraction implements GameDataAccess {
                 }
             }
         } catch (Exception e) {
-            throw new DataAccessException(String.format("Failed to list Games: %s", e.getMessage()));
+            throw new DataAccessException(String.format("Database access failed while listing Games: %s", e.getMessage()));
         }
 
         return games.toArray(new GameData[0]);
@@ -124,7 +124,7 @@ public class SQLGameData extends SQLInteraction implements GameDataAccess {
                     return keys.getInt(1);
                 } else {
 
-                    throw new DataAccessException("Error: no key obtained.");
+                    throw new DataAccessException("Database access failed while creating game.");
                 }
             }
         } catch (SQLException | DataAccessException e) {
