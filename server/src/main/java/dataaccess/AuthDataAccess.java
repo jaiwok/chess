@@ -1,13 +1,14 @@
 package dataaccess;
 
 import model.AuthData;
+import java.sql.SQLException;
 
 public interface AuthDataAccess {
     /**
      * Clears all authData
      *
      */
-    void clear() throws DataAccessException;
+    void clear() throws DataAccessException, SQLException;
 
     /**
      * Adds an authData object

@@ -9,6 +9,8 @@ import service.exceptions.*;
 import server.handler.*;
 import spark.*;
 
+import java.sql.SQLException;
+
 public class Server {
 
     public int run(int desiredPort) {
@@ -24,7 +26,7 @@ public class Server {
             userClass = new SQLUserData();
             authClass = new SQLAuthData();
             gameClass = new SQLGameData();
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | SQLException e) {
             throw new RuntimeException(e);
         }
 
