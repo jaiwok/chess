@@ -10,10 +10,12 @@ import dataaccess.localmemory.*;
 import model.*;
 import service.exceptions.NameAlreadyInUseException;
 
+import java.sql.SQLException;
+
 class ClearServiceTest {
 
     @Test
-    void testClearService() throws DataAccessException, NameAlreadyInUseException {
+    void testClearService() throws DataAccessException, NameAlreadyInUseException, SQLException{
         AuthDataAccess authDataAObject = new AuthDataStorage();
         GameDataAccess gameDataAObject = new GameDataStorage();
         UserDataAccess userDataAObject = new UserDataStorage();

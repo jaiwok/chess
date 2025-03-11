@@ -8,6 +8,8 @@ import dataaccess.localmemory.*;
 import model.*;
 import service.exceptions.*;
 
+import java.sql.SQLException;
+
 class UserServiceTest {
     private AuthDataAccess authDataAObject;
     private GameDataAccess gameDataAObject;
@@ -15,7 +17,7 @@ class UserServiceTest {
     private final UserData user = new UserData("myUser", "poopypants", "fake@notreal.com");
 
     @BeforeEach
-    public void clearBeforeTests() throws DataAccessException {
+    public void clearBeforeTests() throws DataAccessException,SQLException {
         authDataAObject = new AuthDataStorage();
         gameDataAObject = new GameDataStorage();
         userDataAObject = new UserDataStorage();
@@ -24,7 +26,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidRegister() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException {
+    void testValidRegister() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException, SQLException {
 
         AuthData newRegUser = new UserService(userDataAObject, authDataAObject).register(user);
 
@@ -36,14 +38,14 @@ class UserServiceTest {
     }
 
     @Test
-    void testInvalidRegister() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException {
+    void testInvalidRegister() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException ,SQLException{
         new UserService(userDataAObject, authDataAObject).register(user);
 
         assertThrows(NameAlreadyInUseException.class, () -> new UserService(userDataAObject, authDataAObject).register(user));
     }
 
     @Test
-    void testValidLogin() throws DataAccessException, UnauthorizedUserException, FaultyRequestException, NameAlreadyInUseException {
+    void testValidLogin() throws DataAccessException, UnauthorizedUserException, FaultyRequestException, NameAlreadyInUseException, SQLException {
         new UserService(userDataAObject, authDataAObject).register(user);
         AuthData authData = new UserService(userDataAObject, authDataAObject).login(user.username(), user.password());
 
@@ -58,7 +60,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidLogout() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException, UnauthorizedUserException {
+    void testValidLogout() throws DataAccessException, FaultyRequestException, NameAlreadyInUseException, UnauthorizedUserException, SQLException {
         AuthData authData = new UserService(userDataAObject, authDataAObject).register(user);
         new UserService(userDataAObject, authDataAObject).logout(authData.authToken());
 
