@@ -354,7 +354,10 @@ public class ChessGame {
             return false;
         }
         ChessGame chessGame = (ChessGame) o;
-        return pawnMoved2Spots == chessGame.pawnMoved2Spots && currentTeam == chessGame.currentTeam && Objects.equals(board, chessGame.board) && Objects.equals(pawnMovement, chessGame.pawnMovement);
+        return  pawnMoved2Spots == chessGame.pawnMoved2Spots &&
+                currentTeam == chessGame.currentTeam &&
+                Objects.equals(board, chessGame.board) &&
+                Objects.equals(pawnMovement, chessGame.pawnMovement);
     }
 
     @Override
