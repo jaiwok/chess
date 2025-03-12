@@ -45,10 +45,11 @@ public class SQLGameData extends SQLInteraction implements GameDataAccess {
 
 
     public GameData getGameData(int id) throws DataAccessException {
-        try (var database = DatabaseManager.getConnection()) {
 
-            var statement = "SELECT gameId, gameName, whiteUsername, blackUsername, game FROM game WHERE gameId=?";
-            try (var newStatement = database.prepareStatement(statement)) {
+        var statement = "SELECT gameId, gameName, whiteUsername, blackUsername, game FROM game WHERE gameId=?";
+
+        try (var database = DatabaseManager.getConnection();
+             var newStatement = database.prepareStatement(statement)) {
 
                 newStatement.setInt(1, id);
                 try (var r = newStatement.executeQuery()) {
@@ -57,12 +58,10 @@ public class SQLGameData extends SQLInteraction implements GameDataAccess {
                         return formatGameObj(r);
                     }
                 }
-            }
         } catch (Exception e) {
 
             throw new DataAccessException(String.format("Database access failed while getting game Data: %s", e.getMessage()));
         }
-
         return null;
     }
 

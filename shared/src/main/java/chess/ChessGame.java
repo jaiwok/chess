@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
@@ -17,8 +18,6 @@ import static java.lang.Math.abs;
 public class ChessGame {
     private TeamColor currentTeam;
     private ChessBoard board;
-
-    //Extra credit
     private boolean pawnMoved2Spots;
     private ChessPosition pawnMovement;
 
@@ -347,5 +346,19 @@ public class ChessGame {
             }
         }
         return newBoard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessGame chessGame = (ChessGame) o;
+        return pawnMoved2Spots == chessGame.pawnMoved2Spots && currentTeam == chessGame.currentTeam && Objects.equals(board, chessGame.board) && Objects.equals(pawnMovement, chessGame.pawnMovement);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentTeam, board, pawnMoved2Spots, pawnMovement);
     }
 }
