@@ -15,6 +15,9 @@ import model.*;
 import model.returnobjects.*;
 import passoff.model.TestResult;
 
+import static ui.EscapeSequences.RESET_TEXT_COLOR;
+import static ui.EscapeSequences.SET_TEXT_COLOR_RED;
+
 public class Facade{
 
     private String serverUrl;
@@ -29,7 +32,7 @@ public class Facade{
         try {
             return gameIdMap.get(gameNum);
         } catch(Exception e) {
-            throw new RuntimeException("Invalid game number");
+            throw new RuntimeException(SET_TEXT_COLOR_RED + "Invalid game number"  + RESET_TEXT_COLOR);
         }
     }
 
@@ -41,7 +44,7 @@ public class Facade{
                 }
             }
         } catch(Exception e) {
-            throw new RuntimeException("Invalid game number");
+            throw new RuntimeException(SET_TEXT_COLOR_RED + "Invalid game number"  + RESET_TEXT_COLOR);
         }
         return id;
     }

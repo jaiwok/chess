@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 
 public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException {
-        System.out.println("♕ 240 Chess Client: ♕");
+        System.out.println("♕ Chess Client: ♔");
 
         var serverUrl = "http://localhost:8080";
 
