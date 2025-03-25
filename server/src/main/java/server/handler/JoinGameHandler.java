@@ -46,7 +46,11 @@ public class JoinGameHandler implements Route {
             res.status(200);
             return json.toJson(null);
 
-        } catch (UnauthorizedUserException e) {
+        }catch (UserAlreadyInGameException e){
+            res.status(888);
+            return json.toJson(new ErrorMsg(e.getMessage()));
+        }
+        catch (UnauthorizedUserException e) {
             res.status(401);
             return json.toJson(new ErrorMsg(e.getMessage()));
         } catch(FaultyRequestException e){

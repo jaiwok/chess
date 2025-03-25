@@ -7,6 +7,8 @@ import model.GameData;
 import dataaccess.DataAccessException;
 import service.exceptions.*;
 
+import java.util.Objects;
+
 public class GameService {
     private final AuthDataAccess authClass;
     private final GameDataAccess gameClass;
@@ -57,7 +59,7 @@ public class GameService {
      * @param color team to join the game as
      */
     public void joinGame(String authToken, int id, chess.ChessGame.TeamColor color)
-            throws  DataAccessException, FaultyRequestException, NameAlreadyInUseException, UnauthorizedUserException{
+            throws DataAccessException, FaultyRequestException, NameAlreadyInUseException, UnauthorizedUserException, UserAlreadyInGameException {
 
         if(authClass.findAuthDataByToken(authToken) !=  null) {
             GameData game = gameClass.getGameData(id);
@@ -67,9 +69,12 @@ public class GameService {
                 if(colorIsFree(game,color)){
                     
                     String username = authClass.findAuthDataByToken(authToken).username();
+                    if(Objects.equals(username, game.whiteUsername()) || Objects.equals(username, game.blackUsername())){
+                        throw new UserAlreadyInGameException("Error: User already in game");
+                    }
                     gameClass.joinGame(username, id, color);
                     
-                } else{
+                }else{
                     throw new NameAlreadyInUseException("Error: Color already taken");
                 }
             } else{
