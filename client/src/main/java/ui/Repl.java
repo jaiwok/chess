@@ -16,53 +16,49 @@ public class Repl {
     public Repl(String serverUrl) {
         this.serverUrl = serverUrl;
         this.serverFacade = new Facade(serverUrl);
-//        this.scanner = new Scanner(System.in);
     }
 
     public void run() throws IOException, URISyntaxException {
-//        System.out.println("Welcome to Chess. Type 'help' for a list of commands.");
 
         UserContext userContext = UserContext.getInstance();
         UserInterface currentRepl = new PreLoginRepl(serverUrl, State.LOGGEDOUT, userContext);
-        boolean firstTimeLogin = true;
+        boolean firstLogin = true;
 
         Scanner scanner = new Scanner(System.in);
 
         var result = "";
 
         while (!result.equals("quit")) {
+
             printPrompt(currentRepl.getState());
             String line = scanner.nextLine();
 
             try {
-
-                result = currentRepl.eval(line);
+                result = currentRepl.evalCMD(line);
                 System.out.print(result);
 
                 if(line.equals("quit")) {
                     break;
                 }
-                // check if we need to change uis
+
                 switch (currentRepl.getState()){
                     case LOGGEDOUT -> currentRepl = new PreLoginRepl(serverUrl, State.LOGGEDOUT, userContext);
                     case LOGGEDIN -> {
                         currentRepl = new PostLoginRepl(serverUrl, State.LOGGEDIN, userContext);
-                        fillMap(firstTimeLogin);
-                        firstTimeLogin = false;
-//                        System.out.print("LOGGED IN");
-
-                    }
+                        createMap(firstLogin);
+                        firstLogin = false;
+                        }
 //                    case INGAME -> currentRepl = new GamePlayUi(serverUrl, State.INGAME, userContext);
                     case INGAME -> System.out.print("IN GAME");
                 }
-
             } catch (Throwable e) {
+
                 var msg = e.toString();
                 System.out.print(msg);
             }
         }
-        System.out.println();
 
+        System.out.println();
     }
 
     private static void printPrompt(State state) {
@@ -73,9 +69,7 @@ public class Repl {
         }
     }
 
-    private void fillMap(boolean firstTimeLogin) throws Exception {
-        if(firstTimeLogin){
-            serverFacade.fillMap();
-        }
+    private void createMap(boolean firstLogin) throws Exception {
+        if(firstLogin){ serverFacade.generateGameListMap(); }
     }
 }

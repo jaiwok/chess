@@ -21,7 +21,7 @@ public abstract class UserInterface {
 
     public abstract String help();
 
-    public abstract String eval(String input);
+    public abstract String evalCMD(String input);
 
     public State getState() {
         return state;

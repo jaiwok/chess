@@ -32,7 +32,7 @@ public class PostLoginRepl extends UserInterface{
                 """;
             }
 
-            public String eval(String input){
+            public String evalCMD(String input){
                 try{
                     var in = input.toLowerCase().split(" ");
                     var cmd = (in.length > 0) ? in[0] : "help";
@@ -42,8 +42,8 @@ public class PostLoginRepl extends UserInterface{
                         case "create" -> create(params);
                         case "list" -> list();
                         case "play" -> play(params);
+                        case "logout" -> logout();
                         case "observe" -> observe(params);
-                        case "logout" -> logout(params);
                         case "quit" -> "exiting...";
                         default -> help();
                     };
@@ -58,34 +58,34 @@ public class PostLoginRepl extends UserInterface{
                 } else{
                     GameData game = new GameData(0, null, null, params[0], new ChessGame());
                     server.createGame(game);
-                    return "created game " + (server.nextGameNum - 1) + ": " + params[0];
+                    return "created Game #" + (server.nextGameInt - 1) + ": " + params[0];
                 }
             }
 
             private String list() throws Exception {
                 GameList gameList = server.listGames();
                 StringBuilder string = new StringBuilder();
-
+                string.append("\n");
                 for (GameData game : gameList.games()) {
                     int gameNum =  server.getGameNum(game.gameID());
-                    string.append("Game: ")
+                    string.append(SET_TEXT_COLOR_BLUE)
+                            .append(" Game #")
                             .append(gameNum)
-                            .append(" ")
+                            .append(": ")
+                            .append(RESET_TEXT_COLOR)
                             .append(game.gameName())
-                            .append(" - White: ")
+                            .append(" [White: ")
                             .append(game.whiteUsername())
                             .append(", Black: ")
                             .append(game.blackUsername())
-                            .append("\n");
+                            .append("]\n");
                 }
-
                 return string.toString();
-
             }
 
             private String play(String[] params) throws Exception {
                 if(params.length != 2){
-                    throw new Exception(SET_TEXT_COLOR_RED + "Expected <game ID> <BLACK/WHITE>" + RESET_TEXT_COLOR);
+                    throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <game ID> <BLACK/WHITE>" + RESET_TEXT_COLOR);
                 } else {
                     int gameNum = Integer.parseInt(params[0]);
                     int id = server.getGameId(gameNum);
@@ -101,7 +101,7 @@ public class PostLoginRepl extends UserInterface{
 
             private String observe(String[] params) throws Exception {
                 if(params.length != 1){
-                    throw new Exception(SET_TEXT_COLOR_RED + "Expected <game ID>" + RESET_TEXT_COLOR);
+                    throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <game ID>" + RESET_TEXT_COLOR);
                 } else {
                     int gameNum = Integer.parseInt(params[0]);
                     int id = server.getGameId(gameNum);
@@ -111,9 +111,9 @@ public class PostLoginRepl extends UserInterface{
                 }
             }
 
-            private String logout(String[] params) throws Exception {
+            private String logout() throws Exception {
                 server.logout();
                 setState(State.LOGGEDOUT);
-                return "Signed out";
+                return "Logged out";
             }
         }

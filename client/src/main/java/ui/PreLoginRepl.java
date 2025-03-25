@@ -7,6 +7,7 @@ import serverdata.UserContext;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static ui.EscapeSequences.*;
 
@@ -26,16 +27,18 @@ public class PreLoginRepl extends UserInterface {
         """;
     }
 
-    public String eval(String input){
+    public String evalCMD(String input){
         try{
+
             var in = input.toLowerCase().split(" ");
-            var cmd = (in.length > 0) ? in[0] : "help";
+            var cmd = (in.length > 0) ? in[0] : "";
             var params = Arrays.copyOfRange(in, 1, in.length);
 
             return switch (cmd){
+                case "clear" -> clear(params); //Hidden command
+                case "quit" -> "exiting...";
                 case "register" -> register(params);
                 case "login" -> login(params);
-                case "quit" -> "exiting...";
                 default -> help();
             };
         } catch (Exception e){
@@ -43,9 +46,19 @@ public class PreLoginRepl extends UserInterface {
         }
     }
 
+    private String clear(String[] params) throws Exception{
+        if(params.length !=1){
+            throw new Exception( SET_TEXT_COLOR_RED + "Expected: admin password" + RESET_TEXT_COLOR);
+        } else if (!Objects.equals(params[0], "poopypants")){
+            throw new Exception( SET_TEXT_COLOR_RED + "Invalid admin password" + RESET_TEXT_COLOR);
+        }else {
+            return server.clearDB();
+        }
+    }
+
     private String register(String[] params) throws Exception {
         if(params.length != 3) {
-            throw new Exception( SET_TEXT_COLOR_RED + "Expected: <username> <password> <email>" + RESET_TEXT_COLOR);
+            throw new Exception( SET_TEXT_COLOR_RED + "Expected format: <username> <password> <email>" + RESET_TEXT_COLOR);
         } else{
             UserData user = new UserData(params[0], params[1], params[2]);
             AuthTokenResponse authToken = server.register(user);
@@ -56,7 +69,7 @@ public class PreLoginRepl extends UserInterface {
 
     private String login(String[] params) throws Exception {
         if(params.length != 2) {
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected: <username> <password>"  + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <username> <password>"  + RESET_TEXT_COLOR);
         } else {
             UserData user = new UserData(params[0], params[1], null);
             AuthTokenResponse authToken = server.login(user);
