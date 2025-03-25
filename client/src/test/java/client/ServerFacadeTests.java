@@ -42,10 +42,7 @@ public class ServerFacadeTests {
     }
 
     @AfterAll
-    static void stopServer() {
-        server.stop();
-    }
-
+    static void stopServer() { server.stop(); }
 
     @Test
     public void registerValidTest() throws Exception {
@@ -134,8 +131,38 @@ public class ServerFacadeTests {
         assertThrows(Exception.class, () -> serverFacade.joinGame(req));
     }
 
+    @Test
     public void clearDBValidTest() throws Exception{
         serverFacade.logout();
+
+        serverFacade.clearDB();
+
+        String newUser = username;
+        user = new UserData(newUser, PASSWORD, EMAIL);
+        authToken = serverFacade.register(user).authToken();
+
+        serverFacade.logout();
+
+        serverFacade.clearDB();
+
+        AuthTokenResponse authToken2 = serverFacade.register(user);
+        assertNotNull(authToken2);
     }
 
+    @Test
+    public void clearDBInvalidTest() throws Exception{
+        serverFacade.logout();
+
+        serverFacade.clearDB();
+
+        String newUser = username;
+        user = new UserData(newUser, PASSWORD, EMAIL);
+        authToken = serverFacade.register(user).authToken();
+
+        serverFacade.logout();
+
+        //Not clearing the database after adding user
+
+        assertThrows(Exception.class, () -> serverFacade.register(user));
+    }
 }
