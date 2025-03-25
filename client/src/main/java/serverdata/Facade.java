@@ -21,7 +21,7 @@ import static ui.EscapeSequences.SET_TEXT_COLOR_RED;
 public class Facade{
 
     private String serverUrl;
-    private static Map<Integer, Integer> gameIdMap = new HashMap<>();
+    public static Map<Integer, Integer> gameIdMap = new HashMap<>();
     public static int nextGameInt = 1;
 
     public Facade(String serverUrl) {
@@ -92,7 +92,7 @@ public class Facade{
     }
 
     public void joinGame(JoinGameRequest joinRequest) throws Exception {
-        this.makeRequest("/game", "PUT", joinRequest, null);
+            this.makeRequest("/game", "PUT", joinRequest, null);
     }
 
     private <T> T makeRequest(String path, String method, Object request, Class<T> responseClass) throws Exception {
@@ -133,7 +133,11 @@ public class Facade{
 
     private void throwOnFail(HttpURLConnection http) throws Exception {
         var status = http.getResponseCode();
-        if (!success(status)) {
+        if (status == 403){
+            throw new Exception("403");
+        } else if (status == 888) {
+            throw new Exception("888");
+        } else if (!success(status)) {
             throw new Exception("failure");
         }
     }

@@ -87,6 +87,9 @@ public class PostLoginRepl extends UserInterface{
     }
 
     private String play(String[] params) throws Exception {
+
+        boolean isUserInGame = false;
+        
         if(params.length != 2){
             throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <game #> <White/Black>" + RESET_TEXT_COLOR);
         } else if (!(params[0].matches("-?\\d+(\\.\\d+)?"))) {
@@ -95,14 +98,31 @@ public class PostLoginRepl extends UserInterface{
         } else if (!(Objects.equals(params[1], "white")) && !(Objects.equals(params[1], "black"))) {
             System.out.println(params[1]);
             throw new Exception(SET_TEXT_COLOR_RED + "Expected color white or black" + RESET_TEXT_COLOR);
-        } else {
+        }else {
             int gameNum = Integer.parseInt(params[0]);
             int id = server.getGameId(gameNum);
             ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
             JoinGameRequest joinParams = new JoinGameRequest(color, id);
-            server.joinGame(joinParams);
+            try{
+                server.joinGame(joinParams);
+            }catch (Exception e){
+                if (Objects.equals(e.getMessage(), "403")){
+                    return (SET_TEXT_COLOR_RED + "Color is already taken" + RESET_TEXT_COLOR);
+                }
+                if (Objects.equals(e.getMessage(), "888")){
+                    System.out.println(SET_TEXT_COLOR_RED + "You are already in the game" + RESET_TEXT_COLOR);
+                    isUserInGame = true;
+                }
+            }
+
+            if (!isUserInGame) {
+                userContext.setColor(color);
+//            server.joinGame(joinParams);
+            }else{
+                color = userContext.getColor();
+            }
+
 //            setState(State.INGAME);
-            userContext.setColor(color);
 
 
             if(color == ChessGame.TeamColor.WHITE){
