@@ -19,11 +19,14 @@ public class PreLoginRepl extends UserInterface {
 
     public String help(){
         return """
-        """ + SET_TEXT_COLOR_MAGENTA + "Available commands:\n"
-        + SET_TEXT_BOLD + "  register <username> <password> <email>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [create a new account]\n" + RESET_TEXT_ITALIC
-        + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  login <username> <password>" +  RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +" [login to an existing account]\n" + RESET_TEXT_ITALIC
-        + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  quit" +  RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC +  RESET_TEXT_COLOR +" [closes client]\n" + RESET_TEXT_ITALIC
-        + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  help" +  RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC +  RESET_TEXT_COLOR +" [list available commands]\n" + RESET_TEXT_ITALIC + """ 
+        """ + SET_TEXT_COLOR_MAGENTA + "Available commands:\n" + SET_TEXT_BOLD +
+        "  register <username> <password> <email>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+        " [create a new account]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA +
+        "  login <username> <password>" +  RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+        " [login to an existing account]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  quit" +
+        RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC +  RESET_TEXT_COLOR +" [closes client]\n" + RESET_TEXT_ITALIC +
+        SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  help" +  RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC +
+        RESET_TEXT_COLOR +" [list available commands]\n" + RESET_TEXT_ITALIC + """ 
         """;
     }
 

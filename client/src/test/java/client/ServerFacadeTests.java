@@ -134,4 +134,8 @@ public class ServerFacadeTests {
         assertThrows(Exception.class, () -> serverFacade.joinGame(req));
     }
 
+    public void clearDBValidTest() throws Exception{
+        serverFacade.logout();
+    }
+
 }

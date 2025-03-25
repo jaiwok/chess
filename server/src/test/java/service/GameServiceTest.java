@@ -64,7 +64,9 @@ class GameServiceTest {
     }
 
     @Test
-    public void testValidJoinGame() throws DataAccessException, UnauthorizedUserException, FaultyRequestException, NameAlreadyInUseException, UserAlreadyInGameException {
+    public void testValidJoinGame() throws DataAccessException, UnauthorizedUserException,
+            FaultyRequestException, NameAlreadyInUseException, UserAlreadyInGameException {
+
         int id = gameService.addGame(authToken, "correct game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 
@@ -76,7 +78,9 @@ class GameServiceTest {
     }
 
     @Test
-    public void testInvalidJoinGame() throws DataAccessException, UnauthorizedUserException, FaultyRequestException, NameAlreadyInUseException, UserAlreadyInGameException {
+    public void testInvalidJoinGame() throws DataAccessException, UnauthorizedUserException,
+            FaultyRequestException, NameAlreadyInUseException, UserAlreadyInGameException {
+        
         int id = gameService.addGame(authToken, "correct game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 

@@ -23,13 +23,19 @@ public class PostLoginRepl extends UserInterface{
     public String help(){
         return """
         """ + SET_TEXT_COLOR_MAGENTA + "Available commands:\n" +
-                SET_TEXT_BOLD + "  list" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [see all games on the server]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  create <game name>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [create a new game]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  play <game #> <White/Black>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [join a game as the selected color]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  observe <game #>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [observe a game]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  logout" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [log out from your account]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  quit" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [exit the application]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  help" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [list available commands]\n" + RESET_TEXT_ITALIC + """
+                SET_TEXT_BOLD + "  list" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+                " [see all games on the server]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA +
+                "  create <game name>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+                " [create a new game]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA +
+                "  play <game #> <White/Black>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+                " [join a game as the selected color]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA +
+                "  observe <game #>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+                " [observe a game]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  logout" +
+                RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [log out from your account]\n" +
+                RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  quit" + RESET_TEXT_BOLD_FAINT +
+                SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [exit the application]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD +
+                SET_TEXT_COLOR_MAGENTA + "  help" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+                " [list available commands]\n" + RESET_TEXT_ITALIC + """
                 """;
     }
 
@@ -147,9 +153,7 @@ public class PostLoginRepl extends UserInterface{
             server.getGameId(gameNum);
             PrintBoard.print(new ChessGame(), ChessGame.TeamColor.WHITE);
             PrintBoard.print(new ChessGame(), ChessGame.TeamColor.BLACK);
-//            int gameNum = Integer.parseInt(params[0]);
-//            int id = server.getGameId(gameNum);
-//            setState(State.INGAME);
+//            int gameNum = Integer.parseInt(params[0]); int id = server.getGameId(gameNum); setState(State.INGAME);
 
             return "Observing game: "+ params[0];
         }
