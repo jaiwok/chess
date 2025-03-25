@@ -45,18 +45,18 @@ public class PreLoginRepl extends UserInterface {
 
     private String register(String[] params) throws Exception {
         if(params.length != 3) {
-            throw new Exception("Expected: <username> <password> <email>");
+            throw new Exception( SET_TEXT_COLOR_RED + "Expected: <username> <password> <email>" + RESET_TEXT_COLOR);
         } else{
             UserData user = new UserData(params[0], params[1], params[2]);
             AuthTokenResponse authToken = server.register(user);
             setState(State.LOGGEDIN);
-            return "registered!";
+            return "registered user " + params[0] + " and logged in";
         }
     }
 
     private String login(String[] params) throws Exception {
         if(params.length != 2) {
-            throw new Exception("Expected: <username> <password>");
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected: <username> <password>"  + RESET_TEXT_COLOR);
         } else {
             UserData user = new UserData(params[0], params[1], null);
             AuthTokenResponse authToken = server.login(user);

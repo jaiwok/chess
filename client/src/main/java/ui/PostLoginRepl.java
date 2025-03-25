@@ -54,7 +54,7 @@ public class PostLoginRepl extends UserInterface{
 
             private String create(String[] params) throws Exception {
                 if(params.length != 1){
-                    throw new Exception("Expected <game name>");
+                    throw new Exception(SET_TEXT_COLOR_RED + "Expected <game name>"  + RESET_TEXT_COLOR);
                 } else{
                     GameData game = new GameData(0, null, null, params[0], new ChessGame());
                     server.createGame(game);
@@ -85,7 +85,7 @@ public class PostLoginRepl extends UserInterface{
 
             private String play(String[] params) throws Exception {
                 if(params.length != 2){
-                    throw new Exception("Expected <game ID> <BLACK/WHITE>");
+                    throw new Exception(SET_TEXT_COLOR_RED + "Expected <game ID> <BLACK/WHITE>" + RESET_TEXT_COLOR);
                 } else {
                     int gameNum = Integer.parseInt(params[0]);
                     int id = server.getGameId(gameNum);
@@ -101,7 +101,7 @@ public class PostLoginRepl extends UserInterface{
 
             private String observe(String[] params) throws Exception {
                 if(params.length != 1){
-                    throw new Exception("Expected <game ID>");
+                    throw new Exception(SET_TEXT_COLOR_RED + "Expected <game ID>" + RESET_TEXT_COLOR);
                 } else {
                     int gameNum = Integer.parseInt(params[0]);
                     int id = server.getGameId(gameNum);
