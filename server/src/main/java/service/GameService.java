@@ -69,9 +69,7 @@ public class GameService {
                 if(colorIsFree(game,color)){
                     
                     String username = authClass.findAuthDataByToken(authToken).username();
-//                    if(Objects.equals(username, game.whiteUsername()) || Objects.equals(username, game.blackUsername())){
-//                        throw new UserAlreadyInGameException("Error: User already in game");
-//                    }
+//                    if(Objects.equals(username, game.whiteUsername()) || Objects.equals(username, game.blackUsername())){ throw new UserAlreadyInGameException("Error: User already in game"); }
                     gameClass.joinGame(username, id, color);
                     
                 }else{
