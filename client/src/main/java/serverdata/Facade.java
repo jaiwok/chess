@@ -13,12 +13,13 @@ import java.util.Map;
 
 import model.*;
 import model.returnobjects.*;
+import passoff.model.TestResult;
 
 public class Facade{
 
     private String serverUrl;
-    private static Map<Integer, Integer> gameNumId = new HashMap<>();
-    public static int nextGameNum = 1;
+    private static Map<Integer, Integer> gameIdMap = new HashMap<>();
+    public static int nextGameInt = 1;
 
     public Facade(String serverUrl) {
         this.serverUrl = serverUrl;
@@ -26,74 +27,74 @@ public class Facade{
 
     public int getGameId(int gameNum){
         try {
-            return gameNumId.get(gameNum);
+            return gameIdMap.get(gameNum);
         } catch(Exception e) {
-            throw new RuntimeException("invalid game number");
+            throw new RuntimeException("Invalid game number");
         }
     }
 
-    public int getGameNum(int gameId) {
+    public int getGameNum(int id) {
         try {
-            for (Map.Entry<Integer, Integer> entry : gameNumId.entrySet()) {
-                if (entry.getValue() == gameId) {
+            for (Map.Entry<Integer, Integer> entry : gameIdMap.entrySet()) {
+                if (entry.getValue() == id) {
                     return entry.getKey();
                 }
             }
         } catch(Exception e) {
-            throw new RuntimeException("invalid game number");
+            throw new RuntimeException("Invalid game number");
         }
-        return gameId;
+        return id;
     }
 
-    public void fillMap() throws Exception {
+    public void generateGameListMap() throws Exception {
         GameList games = listGames();
         for(GameData game : games.games()){
-            gameNumId.put(nextGameNum, game.gameID());
-            nextGameNum++;
+            gameIdMap.put(nextGameInt++, game.gameID());
         }
     }
 
     public AuthTokenResponse register(UserData userData) throws Exception {
-        var path = "/user";
-        AuthTokenResponse authToken = this.makeRequest("POST", path, userData, AuthTokenResponse.class);
+        AuthTokenResponse authToken = this.makeRequest("/user","POST", userData, AuthTokenResponse.class);
         UserContext.getInstance().setAuthToken(authToken.authToken());
         return authToken;
     }
 
     public AuthTokenResponse login(UserData userData) throws Exception {
-        var path = "/session";
-        AuthTokenResponse authToken = this.makeRequest("POST", path, userData, AuthTokenResponse.class);
+        AuthTokenResponse authToken = this.makeRequest( "/session", "POST", userData, AuthTokenResponse.class);
         UserContext.getInstance().setAuthToken(authToken.authToken());
         return authToken;
-
     }
 
     public void logout() throws Exception {
-        var path = "/session";
-        this.makeRequest("DELETE", path, null, null);
+        this.makeRequest("/session", "DELETE", null, null);
     }
 
     public GameId createGame(GameData gameData) throws Exception {
-        var path = "/game";
-        GameId gameId = this.makeRequest("POST", path, gameData, GameId.class);
-        gameNumId.put(nextGameNum, gameId.gameID()); // put in map
-        nextGameNum++;
-        return gameId;
+        GameId gameId = this.makeRequest("/game", "POST", gameData, GameId.class);
+        gameIdMap.put(nextGameInt++, gameId.gameID());
+        return gameId; //DO I need this
+    }
+
+    public String clearDB() throws Exception{
+        try {
+            this.makeRequest("/db","DELETE", (Object) null, TestResult.class);
+        }catch (Throwable e) {
+            return e.toString();
+        }
+        return "Database Cleared";
     }
 
     public GameList listGames() throws Exception {
-        var path = "/game";
-        return this.makeRequest("GET", path, null, GameList.class);
+        return this.makeRequest( "/game","GET", null, GameList.class);
     }
 
     public void joinGame(JoinGameRequest joinRequest) throws Exception {
-        var path = "/game";
-        this.makeRequest("PUT", path, joinRequest, null);
-
+        this.makeRequest("/game", "PUT", joinRequest, null);
     }
 
-    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
+    private <T> T makeRequest(String path, String method, Object request, Class<T> responseClass) throws Exception {
         try {
+
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
@@ -101,33 +102,35 @@ public class Facade{
 
             writeBody(request, http);
             http.connect();
-            throwIfNotSuccessful(http);
+            throwOnFail(http);
             return readBody(http, responseClass);
+
         } catch (Exception e) {
+
             throw new Exception(e.getMessage());
         }
     }
 
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
-        // add authToken if required
         String authToken = UserContext.getInstance().getAuthToken();
+
         if (authToken != null) {
             http.addRequestProperty("Authorization", authToken);
         }
         if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
 
-            String reqData = new Gson().toJson(request);
+            String data = new Gson().toJson(request);
 
-            try (OutputStream reqBody = http.getOutputStream()) {
-                reqBody.write(reqData.getBytes());
+            try (OutputStream req = http.getOutputStream()) {
+                req.write(data.getBytes());
             }
         }
     }
 
-    private void throwIfNotSuccessful(HttpURLConnection http) throws Exception {
+    private void throwOnFail(HttpURLConnection http) throws Exception {
         var status = http.getResponseCode();
-        if (!isSuccessful(status)) {
+        if (!success(status)) {
             throw new Exception("failure");
         }
     }
@@ -145,7 +148,7 @@ public class Facade{
         return response;
     }
 
-    private boolean isSuccessful(int status) {
+    private boolean success(int status) {
         return status >= 200 && status < 300;
     }
 
