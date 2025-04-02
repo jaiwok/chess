@@ -48,8 +48,8 @@ public class Repl {
                         createMap(firstLogin);
                         firstLogin = false;
                         }
-//                    case INGAME -> currentRepl = new GamePlayUi(serverUrl, State.INGAME, userContext);
-                    case INGAME -> System.out.print("IN GAME");
+                    case INGAME -> currentRepl = new InGameRepl(serverUrl, State.INGAME, userContext);
+//                    case INGAME -> System.out.print("IN GAME");
                 }
             } catch (Throwable e) {
 

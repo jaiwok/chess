@@ -55,6 +55,7 @@ public class PreLoginRepl extends UserInterface {
         } else if (!Objects.equals(params[0], "poopypants")){
             throw new Exception( SET_TEXT_COLOR_RED + "Invalid admin password" + RESET_TEXT_COLOR);
         }else {
+            server.nextGameInt = 1;
             return server.clearDB();
         }
     }

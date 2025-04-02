@@ -65,7 +65,7 @@ public class PostLoginRepl extends UserInterface{
         } else{
             GameData game = new GameData(0, null, null, params[0], new ChessGame());
             server.createGame(game);
-            return "created Game #" + (server.nextGameInt - 1) + ": " + params[0];
+            return "created Game #" + ": " + params[0];
         }
     }
 
@@ -123,21 +123,19 @@ public class PostLoginRepl extends UserInterface{
 
             if (!isUserInGame) {
                 userContext.setColor(color);
-//            server.joinGame(joinParams);
             }else{
                 color = userContext.getColor();
             }
 
-//            setState(State.INGAME);
+            userContext.setObserver(false);
+            setState(State.INGAME);
 
 
-            if(color == ChessGame.TeamColor.WHITE){
-                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.WHITE);
-                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.BLACK);
-            }else {
-                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.BLACK);
-                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.WHITE);
-            }
+//            if(color == ChessGame.TeamColor.WHITE){
+//                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.WHITE);
+//            }else {
+//                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.BLACK);
+//            }
 
             return "Joined Game as " + color;
         }
@@ -150,10 +148,10 @@ public class PostLoginRepl extends UserInterface{
             throw new Exception(SET_TEXT_COLOR_RED + "Expected number for game #" + RESET_TEXT_COLOR);
         }else {
             int gameNum = Integer.parseInt(params[0]);
-            server.getGameId(gameNum);
+            int id = server.getGameId(gameNum);
             PrintBoard.print(new ChessGame(), ChessGame.TeamColor.WHITE);
-            PrintBoard.print(new ChessGame(), ChessGame.TeamColor.BLACK);
-//            int gameNum = Integer.parseInt(params[0]); int id = server.getGameId(gameNum); setState(State.INGAME);
+            userContext.setObserver(true);
+            setState(State.INGAME);
 
             return "Observing game: "+ params[0];
         }

@@ -61,15 +61,16 @@ public class PrintBoard {
             if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
                 color = SET_TEXT_COLOR_WHITE;
                 symbol = switch (piece.getPieceType()) {
-                    case KING -> WHITE_KING;
-                    case QUEEN -> WHITE_QUEEN;
-                    case BISHOP -> WHITE_BISHOP;
-                    case KNIGHT -> WHITE_KNIGHT;
-                    case ROOK -> WHITE_ROOK;
-                    case PAWN -> WHITE_PAWN;
+                    case KING ->   BLACK_KING;
+                    case QUEEN ->  BLACK_QUEEN;
+                    case BISHOP -> BLACK_BISHOP;
+                    case KNIGHT -> BLACK_KNIGHT;
+                    case ROOK ->   BLACK_ROOK;
+                    case PAWN ->   BLACK_PAWN;
                 };
             } else {
                 color = SET_TEXT_COLOR_BLACK;
+//                color = SET_TEXT_COLOR_RED;
                 symbol = switch (piece.getPieceType()) {
                     case KING -> BLACK_KING;
                     case QUEEN -> BLACK_QUEEN;
@@ -84,7 +85,7 @@ public class PrintBoard {
     }
 
     private static String getColoredSquare(ChessPiece piece, boolean isLightSquare) {
-        String bgColor = isLightSquare ? SET_BG_COLOR_LIGHT_GREY : SET_BG_COLOR_DARK_GREY;
+        String bgColor = isLightSquare ? SET_BG_COLOR_BEIGE : SET_BG_COLOR_BROWN;
         String symbol = getPieceSymbol(piece);
         return bgColor + symbol + RESET_BG_COLOR;
     }

@@ -8,6 +8,7 @@ public class UserContext {
     private ChessGame game;
     private ChessGame.TeamColor color;
     private int gameId;
+    private boolean observer;
 
     private UserContext() {}
 
@@ -23,9 +24,7 @@ public class UserContext {
     }
 
 
-    public ChessGame getGame(){
-        return this.game;
-    }
+    public ChessGame getGame(){ return this.game; }
 
 
     public String getAuthToken() {
@@ -56,4 +55,8 @@ public class UserContext {
     public void setGameId(int gameId) {
         this.gameId = gameId;
     }
+
+    public boolean isObserver() { return observer; }
+
+    public void setObserver(boolean observer) { this.observer = observer; }
 }
