@@ -47,4 +47,10 @@ public interface GameDataAccess {
      */
     void joinGame( String username, int gameId, ChessGame.TeamColor color) throws DataAccessException, FaultyRequestException;
 
+    /**
+     * updates a game
+     *
+     * @param game data to update in a game
+     */
+    void updateGame(GameData game) throws DataAccessException;
 }

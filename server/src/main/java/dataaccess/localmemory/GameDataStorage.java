@@ -73,6 +73,8 @@ public class GameDataStorage implements GameDataAccess{
         gamesMap.put(gameId, joinedGame);
     }
 
+    public void updateGame(GameData game) throws DataAccessException { return; }
+
     private int generateId() {
         int id = 1;
         while (gamesMap.get(id) != null) {

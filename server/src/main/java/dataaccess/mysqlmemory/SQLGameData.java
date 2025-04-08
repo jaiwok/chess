@@ -157,6 +157,25 @@ public class SQLGameData extends SQLInteraction implements GameDataAccess {
         }
     }
 
+    public void updateGame(GameData game) throws DataAccessException {
+        int gameId = game.gameID();
+        String statement = "UPDATE `game` SET whiteUsername=?, blackUsername=?, game=? WHERE gameId=?";
+
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+
+            preparedStatement.setString(1, game.whiteUsername());
+            preparedStatement.setString(2, game.blackUsername());
+            preparedStatement.setString(3, new Gson().toJson(game.game()));
+            preparedStatement.setInt(4, gameId); // The WHERE clause uses the gameId
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException | DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
     @Override
     protected String[] getDescription() {
         return new String[]{
