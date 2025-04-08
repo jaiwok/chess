@@ -8,6 +8,8 @@ import  service.*;
 import service.exceptions.*;
 import server.handler.*;
 import spark.*;
+import org.eclipse.jetty.websocket.api.annotations.*;
+import org.eclipse.jetty.websocket.api.*;
 
 import java.sql.SQLException;
 
@@ -15,6 +17,16 @@ public class Server {
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
+
+        //sets up socket connection?
+        Spark.webSocket("/ws", WebSocketHandler.class);
+
+//        try {
+//            WebSocketHandler ws = new WebSocketHandler();
+//            Spark.webSocket("/ws", ws);
+//        } catch (DataAccessException | SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 
         Spark.staticFiles.location("web");
 
@@ -54,7 +66,6 @@ public class Server {
         Spark.get("/game", new ListGamesHandler(gameService));
         Spark.put("/game", new JoinGameHandler(gameService));
 
-        //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
 
         Spark.awaitInitialization();
