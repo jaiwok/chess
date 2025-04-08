@@ -99,7 +99,28 @@ public class WebSocketTests {
         ChessMove move = new ChessMove(new ChessPosition(2, 5), new ChessPosition(3, 5), null);
         makeMove(white, gameID, move,true, false, Set.of(black, observer), Set.of());
     }
+/*
+*
+*     private void makeMove(WebsocketUser white, gameID, ChessMove move, expectSuccess(True), extraNotification(False),
+*       Set<WebsocketUser> inGame, Set<WebsocketUser> otherClients) {
+*
+        TestCommand moveCommand = new TestCommand(sender.authToken(), gameID, move);
+        Map<String, Integer> numExpectedMessages = expectedMessages(sender, 1, inGame, (expectSuccess ? 2 : 0), otherClients);
+        Map<String, List<TestMessage>> actualMessages = environment.exchange(sender.username(), moveCommand, numExpectedMessages, waitTime);
 
+        if(extraNotification && actualMessages.get(sender.username()).size() > 1) {
+            assertCommandMessages(actualMessages, expectSuccess, sender, types(LOAD_GAME, NOTIFICATION),
+                    inGame, types(LOAD_GAME, NOTIFICATION, NOTIFICATION), otherClients);
+        }
+        else {
+            assertCommandMessages(actualMessages, expectSuccess, sender, types(LOAD_GAME),
+                    inGame, types(LOAD_GAME, NOTIFICATION), otherClients);
+        }
+    }
+*
+*
+*
+* */
     @Test
     @Order(5)
     @DisplayName("Make Move Bad Authtoken")
@@ -317,6 +338,7 @@ public class WebSocketTests {
     private void makeMove(WebsocketUser sender, int gameID, ChessMove move, boolean expectSuccess,
                           boolean extraNotification, Set<WebsocketUser> inGame, Set<WebsocketUser> otherClients) {
         TestCommand moveCommand = new TestCommand(sender.authToken(), gameID, move);
+
         Map<String, Integer> numExpectedMessages = expectedMessages(sender, 1, inGame, (expectSuccess ? 2 : 0), otherClients);
         Map<String, List<TestMessage>> actualMessages = environment.exchange(sender.username(), moveCommand, numExpectedMessages, waitTime);
 
