@@ -131,12 +131,6 @@ public class PostLoginRepl extends UserInterface{
             setState(State.INGAME);
 
 
-//            if(color == ChessGame.TeamColor.WHITE){
-//                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.WHITE);
-//            }else {
-//                PrintBoard.print(new ChessGame(), ChessGame.TeamColor.BLACK);
-//            }
-
             return "Joined Game as " + color;
         }
     }

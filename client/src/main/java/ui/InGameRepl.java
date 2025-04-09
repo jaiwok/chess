@@ -18,12 +18,17 @@ public class InGameRepl extends UserInterface{
     public String help(){
         return """
         """ + SET_TEXT_COLOR_MAGENTA + "Available commands:\n" +
-                SET_TEXT_BOLD + "  redraw" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [to reload the board]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  leave" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [to leave the game]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  move <start_location> <end_location>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [to make a move]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  resign" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [to forfeit the game]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  highlight <location>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [to show legal moves]\n" + RESET_TEXT_ITALIC +
-                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  help" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [list available commands]\n" + RESET_TEXT_ITALIC + """
+                SET_TEXT_BOLD + "  redraw" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR +
+                " [to reload the board]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA +
+                "  leave" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [to leave the game]\n" +
+                RESET_TEXT_ITALIC + SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  move <start_location> <end_location>" +
+                RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC + RESET_TEXT_COLOR + " [to make a move]\n" + RESET_TEXT_ITALIC +
+                SET_TEXT_BOLD + SET_TEXT_COLOR_MAGENTA + "  resign" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC +
+                RESET_TEXT_COLOR + " [to forfeit the game]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD +
+                SET_TEXT_COLOR_MAGENTA + "  highlight <location>" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC +
+                RESET_TEXT_COLOR + " [to show legal moves]\n" + RESET_TEXT_ITALIC + SET_TEXT_BOLD +
+                SET_TEXT_COLOR_MAGENTA + "  help" + RESET_TEXT_BOLD_FAINT + SET_TEXT_ITALIC +
+                RESET_TEXT_COLOR + " [list available commands]\n" + RESET_TEXT_ITALIC + """
         """;
     }
 

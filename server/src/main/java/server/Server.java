@@ -21,13 +21,6 @@ public class Server {
         //sets up socket connection?
         Spark.webSocket("/ws", WebSocketHandler.class);
 
-//        try {
-//            WebSocketHandler ws = new WebSocketHandler();
-//            Spark.webSocket("/ws", ws);
-//        } catch (DataAccessException | SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-
         Spark.staticFiles.location("web");
 
         UserDataAccess userClass;
