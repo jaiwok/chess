@@ -9,6 +9,8 @@ public class UserContext {
     private ChessGame.TeamColor color;
     private int gameId;
     private boolean observer;
+    public WebSocketClient wsClient;
+    public String wsURL;
 
     private UserContext() {}
 
@@ -17,6 +19,17 @@ public class UserContext {
             instance = new UserContext();
         }
         return instance;
+    }
+
+    public void startWSConnection(String serverUrl){
+        wsURL = serverUrl.replaceFirst("http", "ws") +"/ws";
+        this.wsClient = new WebSocketClient(wsURL, instance);
+    }
+
+    public void closeWSConnection(){
+        this.wsClient.close();
+        this.wsClient = null;
+        this.wsURL = null;
     }
 
     public ChessGame.TeamColor getColor(){

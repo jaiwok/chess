@@ -51,9 +51,9 @@ public class PreLoginRepl extends UserInterface {
 
     private String clear(String[] params) throws Exception{
         if(params.length !=1){
-            throw new Exception( SET_TEXT_COLOR_RED + "Expected: admin password" + RESET_TEXT_COLOR);
+            throw new Exception( SET_TEXT_COLOR_RED + "Expected: admin password\n" + RESET_TEXT_COLOR);
         } else if (!Objects.equals(params[0], "poopypants")){
-            throw new Exception( SET_TEXT_COLOR_RED + "Invalid admin password" + RESET_TEXT_COLOR);
+            throw new Exception( SET_TEXT_COLOR_RED + "Invalid admin password\n" + RESET_TEXT_COLOR);
         }else {
             server.nextGameInt = 1;
             return server.clearDB();
@@ -62,30 +62,30 @@ public class PreLoginRepl extends UserInterface {
 
     private String register(String[] params) throws Exception {
         if(params.length != 3) {
-            throw new Exception( SET_TEXT_COLOR_RED + "Expected format: <username> <password> <email>" + RESET_TEXT_COLOR);
+            throw new Exception( SET_TEXT_COLOR_RED + "Expected format: <username> <password> <email>\n" + RESET_TEXT_COLOR);
         } else {
             UserData user = new UserData(params[0], params[1], params[2]);
             try {
                 server.register(user);
                 setState(State.LOGGEDIN);
-                return "registered user " + params[0] + " and logged in";
+                return "registered user " + params[0] + " and logged in \n";
             } catch (Exception e) {
-                return SET_TEXT_COLOR_RED + "Username: " + RESET_TEXT_COLOR + params[0] + SET_TEXT_COLOR_RED + " already in use" + RESET_TEXT_COLOR;
+                return SET_TEXT_COLOR_RED + "Username: " + RESET_TEXT_COLOR + params[0] + SET_TEXT_COLOR_RED + " already in use\n" + RESET_TEXT_COLOR;
             }
         }
     }
 
     private String login(String[] params) throws Exception {
         if(params.length != 2) {
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <username> <password>"  + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <username> <password>\n"  + RESET_TEXT_COLOR);
         } else {
             try {
                 UserData user = new UserData(params[0], params[1], null);
                 AuthTokenResponse authToken = server.login(user);
                 setState(State.LOGGEDIN);
-                return "logged in as " + params[0];
+                return "logged in as " + params[0] + "\n";
             } catch (Exception e) {
-                return SET_TEXT_COLOR_RED + "Incorrect Username or Password" + RESET_TEXT_COLOR;
+                return SET_TEXT_COLOR_RED + "Incorrect Username or Password \n" + RESET_TEXT_COLOR;
             }
         }
     }

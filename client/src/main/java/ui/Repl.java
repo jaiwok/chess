@@ -49,7 +49,6 @@ public class Repl {
                         firstLogin = false;
                         }
                     case INGAME -> currentRepl = new InGameRepl(serverUrl, State.INGAME, userContext);
-//                    case INGAME -> System.out.print("IN GAME");
                 }
             } catch (Throwable e) {
 
@@ -63,9 +62,9 @@ public class Repl {
 
     private static void printPrompt(State state) {
         switch (state) {
-            case LOGGEDOUT -> System.out.print("\n" + SET_TEXT_COLOR_BLUE + "Chess Login >>> " + RESET_TEXT_COLOR);
-            case LOGGEDIN -> System.out.print("\n" + SET_TEXT_COLOR_BLUE + "Chess >>> "+ RESET_TEXT_COLOR);
-            case INGAME -> System.out.print("\n" + SET_TEXT_COLOR_BLUE + "Chess Game >>> "+ RESET_TEXT_COLOR);
+            case LOGGEDOUT -> System.out.print(SET_TEXT_COLOR_BLUE + "Chess Login >>> " + RESET_TEXT_COLOR);
+            case LOGGEDIN -> System.out.print(SET_TEXT_COLOR_BLUE + "Chess >>> "+ RESET_TEXT_COLOR);
+            case INGAME -> System.out.print(SET_TEXT_COLOR_BLUE + "Chess Game >>> "+ RESET_TEXT_COLOR);
         }
     }
 

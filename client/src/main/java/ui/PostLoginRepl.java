@@ -5,19 +5,20 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Objects;
 
+import com.google.gson.Gson;
 import serverdata.UserContext;
 import chess.ChessGame;
 import model.GameData;
 import model.returnobjects.*;
+import websocket.commands.UserGameCommand;
 
 import static ui.EscapeSequences.*;
 
 public class PostLoginRepl extends UserInterface{
-
+    Gson gson = new Gson();
 
     public PostLoginRepl(String serverUrl, State state, UserContext userContext) throws IOException, URISyntaxException {
         super(serverUrl, state, userContext);
-
     }
 
     public String help(){
@@ -61,18 +62,18 @@ public class PostLoginRepl extends UserInterface{
 
     private String create(String[] params) throws Exception {
         if(params.length != 1){
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected <game id>"  + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected <game id>\n"  + RESET_TEXT_COLOR);
         } else{
             GameData game = new GameData(0, null, null, params[0], new ChessGame());
             server.createGame(game);
-            return "created Game #" + ": " + params[0];
+            return "Created Game " + ": " + params[0] + "\n";
         }
     }
 
     private String list() throws Exception {
         GameList gameList = server.listGames();
         StringBuilder string = new StringBuilder();
-        string.append("\n");
+//        string.append("\n");
         for (GameData game : gameList.games()) {
             int gameNum =  server.getGameNum(game.gameID());
             string.append(SET_TEXT_COLOR_BLUE)
@@ -97,13 +98,13 @@ public class PostLoginRepl extends UserInterface{
         boolean isUserInGame = false;
         
         if(params.length != 2){
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <game #> <White/Black>" + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <game #> <White/Black>\n" + RESET_TEXT_COLOR);
         } else if (!(params[0].matches("-?\\d+(\\.\\d+)?"))) {
 
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected number for game #" + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected number for game #\n" + RESET_TEXT_COLOR);
         } else if (!(Objects.equals(params[1], "white")) && !(Objects.equals(params[1], "black"))) {
             System.out.println(params[1]);
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected color white or black" + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected color white or black\n" + RESET_TEXT_COLOR);
         }else {
             int gameNum = Integer.parseInt(params[0]);
             int id = server.getGameId(gameNum);
@@ -113,10 +114,10 @@ public class PostLoginRepl extends UserInterface{
                 server.joinGame(joinParams);
             }catch (Exception e){
                 if (Objects.equals(e.getMessage(), "403")){
-                    return (SET_TEXT_COLOR_RED + "Color is already taken" + RESET_TEXT_COLOR);
+                    return (SET_TEXT_COLOR_RED + "Color is already taken\n" + RESET_TEXT_COLOR);
                 }
                 if (Objects.equals(e.getMessage(), "888")){
-                    System.out.println(SET_TEXT_COLOR_RED + "You are already in the game" + RESET_TEXT_COLOR);
+                    System.out.println(SET_TEXT_COLOR_RED + "You are already in the game\n" + RESET_TEXT_COLOR);
                     isUserInGame = true;
                 }
             }
@@ -128,32 +129,47 @@ public class PostLoginRepl extends UserInterface{
             }
 
             userContext.setObserver(false);
+            userContext.setColor(color);
+            userContext.setGameId(id);
+
+            //start up connection
+            userContext.startWSConnection(serverUrl);
+            //send observe command via wb
+            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.CONNECT, userContext.getAuthToken(), userContext.getGameId(), null);
+            String s = gson.toJson(cmd);
+            userContext.wsClient.send(s);
+
             setState(State.INGAME);
-
-
-            return "Joined Game as " + color;
+            return "Joined Game as " + color +"\n";
         }
     }
 
     private String observe(String[] params) throws Exception {
         if(params.length != 1){
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <game #>" + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <game #>\n" + RESET_TEXT_COLOR);
         }  else if (!(params[0].matches("-?\\d+(\\.\\d+)?"))) {
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected number for game #" + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED + "Expected number for game #\n" + RESET_TEXT_COLOR);
         }else {
             int gameNum = Integer.parseInt(params[0]);
-            int id = server.getGameId(gameNum);
-            PrintBoard.print(new ChessGame(), ChessGame.TeamColor.WHITE);
+            userContext.setGameId(server.getGameId(gameNum));
+            userContext.setColor(ChessGame.TeamColor.WHITE);
+            //start up connection
+            userContext.startWSConnection(serverUrl);
+            //send observe command via wb
+            UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.CONNECT, userContext.getAuthToken(), userContext.getGameId(), null);
+            String s = gson.toJson(cmd);
+            userContext.wsClient.send(s);
+
             userContext.setObserver(true);
             setState(State.INGAME);
 
-            return "Observing game: "+ params[0];
+            return "";
         }
     }
 
     private String logout() throws Exception {
         server.logout();
         setState(State.LOGGEDOUT);
-        return "Logged out";
+        return "Logged out\n";
     }
 }

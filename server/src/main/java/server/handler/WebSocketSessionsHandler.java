@@ -33,9 +33,11 @@ public class WebSocketSessionsHandler {
     }
 
     public void broadcastMessage(int gameId, String message, Session originSession) throws IOException {
-        for(Session session : sessionMap.get(gameId) ){
-            if(session != originSession){
-                sendMessage(message, session);
+        if(!sessionMap.isEmpty()){
+            for(Session session : sessionMap.get(gameId) ){
+                if(session != originSession){
+                    sendMessage(message, session);
+                }
             }
         }
     }

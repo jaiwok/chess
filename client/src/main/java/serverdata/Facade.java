@@ -32,7 +32,7 @@ public class Facade{
         try {
             return gameIdMap.get(gameNum);
         } catch(Exception e) {
-            throw new RuntimeException(SET_TEXT_COLOR_RED + "Invalid game number"  + RESET_TEXT_COLOR);
+            throw new RuntimeException(SET_TEXT_COLOR_RED + "Invalid game number\n"  + RESET_TEXT_COLOR);
         }
     }
 
@@ -44,7 +44,7 @@ public class Facade{
                 }
             }
         } catch(Exception e) {
-            throw new RuntimeException(SET_TEXT_COLOR_RED + "Invalid game number"  + RESET_TEXT_COLOR);
+            throw new RuntimeException(SET_TEXT_COLOR_RED + "Invalid game number\n"  + RESET_TEXT_COLOR);
         }
         return id;
     }
@@ -84,7 +84,7 @@ public class Facade{
         }catch (Throwable e) {
             return e.toString();
         }
-        return "Database Cleared";
+        return "Database Cleared\n";
     }
 
     public GameList listGames() throws Exception {
