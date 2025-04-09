@@ -74,7 +74,7 @@ public class InGameRepl extends UserInterface{
         UserGameCommand cmd = new UserGameCommand(UserGameCommand.CommandType.LEAVE, userContext.getAuthToken(), userContext.getGameId(), null);
         String s = gson.toJson(cmd);
         userContext.wsClient.send(s);
-        userContext.wsClient.close();
+        userContext.closeWSConnection();
 
         userContext.setObserver(false);
         userContext.setGame(null);
@@ -87,7 +87,9 @@ public class InGameRepl extends UserInterface{
     private String move(String[] params) throws Exception {
 
         if(params.length != 2){
-            throw new Exception(SET_TEXT_COLOR_RED + "Expected format: <start_location(Column + Row)> <end_location(Column + Row)> <promotion piece>\n" + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED +
+                    "Expected format: <start_location(Column + Row)> <end_location(Column + Row)> <promotion piece>\n"
+                    + RESET_TEXT_COLOR);
         }
 
         ChessMove move = parseMove(params);
@@ -145,7 +147,9 @@ public class InGameRepl extends UserInterface{
 
     private ChessMove parseMove(String[] params) throws Exception {
         if (params.length < 2) {
-            throw new Exception(SET_TEXT_COLOR_RED + "Invalid move input. Expected at least 2 parameters for start or end location.\n" + RESET_TEXT_COLOR);
+            throw new Exception(SET_TEXT_COLOR_RED +
+                    "Invalid move input. Expected at least 2 parameters for start or end location.\n" +
+                    RESET_TEXT_COLOR);
         }
 
         ChessPosition start = parsePosition(params[0]); // e.g., "a2"
@@ -159,7 +163,11 @@ public class InGameRepl extends UserInterface{
                 case "R" -> promotion = ChessPiece.PieceType.ROOK;
                 case "B" -> promotion = ChessPiece.PieceType.BISHOP;
                 case "N" -> promotion = ChessPiece.PieceType.KNIGHT;
-                default -> throw new Exception(SET_TEXT_COLOR_RED + "Invalid promotion piece: " + params[2] + " Expected Q, R, B, N \n" + RESET_TEXT_COLOR);
+                default -> throw new Exception(SET_TEXT_COLOR_RED +
+                        "Invalid promotion piece: " +
+                        params[2] + 
+                        " Expected Q, R, B, N \n" +
+                        RESET_TEXT_COLOR);
             }
         }
 

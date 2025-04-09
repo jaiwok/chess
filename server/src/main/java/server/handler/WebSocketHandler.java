@@ -100,9 +100,6 @@ public class WebSocketHandler {
             throws DataAccessException, IOException, InvalidMoveException {
 
         ChessGame.TeamColor team = gameData.game().getTeamTurn();
-//        if(move.getPromotionPiece() == null){
-//            move = new ChessMove(move.getStartPosition(), move.getEndPosition(), ChessPiece.PieceType.QUEEN);
-//        }
 
         //set up team color and username to check for endgame conditions of other player
         ChessGame.TeamColor otherTeam = ChessGame.TeamColor.WHITE;
@@ -147,12 +144,6 @@ public class WebSocketHandler {
         }catch (Exception e){
         }
 
-//        System.out.println("Valid moves are");
-//        for(ChessMove other : moves){
-//            System.out.println(gson.toJson(other));
-//        }
-//        System.out.println("Your move is");
-//        System.out.println(gson.toJson(move));
         if( moves == null || !moves.contains(move) ) {
             ServerError load = new ServerError(ServerMessageType.ERROR, "Error: Your move is not possible");
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
