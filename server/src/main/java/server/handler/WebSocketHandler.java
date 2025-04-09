@@ -98,7 +98,6 @@ public class WebSocketHandler {
 
     private void makeMove(Session session, String message, GameData gameData, ChessMove move, String username)
             throws DataAccessException, IOException, InvalidMoveException {
-
         ChessGame.TeamColor team = gameData.game().getTeamTurn();
         ChessGame.TeamColor otherTeam = ChessGame.TeamColor.WHITE;
         String otherUserName = gameData.whiteUsername();
@@ -106,18 +105,15 @@ public class WebSocketHandler {
             otherTeam = ChessGame.TeamColor.BLACK;
             otherUserName = gameData.blackUsername();
         }
-
         if(team == ChessGame.TeamColor.WHITE &&
            gameData.blackUsername() != null &&
            gameData.blackUsername().equals(username)) {
-
             ServerError load = new ServerError(ServerMessageType.ERROR, "Error: It's not your turn!");
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
             return;
         } else if(team == ChessGame.TeamColor.BLACK &&
                   gameData.whiteUsername() != null &&
                   gameData.whiteUsername().equals(username)) {
-
             ServerError load = new ServerError(ServerMessageType.ERROR, "Error: It's not your turn!");
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
             return;
@@ -162,7 +158,6 @@ public class WebSocketHandler {
         gameDao.updateGame(gameData);
         ServerLoadGame serverNotification = new ServerLoadGame(ServerMessageType.LOAD_GAME, gameData.game());
         sessions.broadcastMessage(gameData.gameID(), gson.toJson(serverNotification), null);
-
         if(gameOver){
             if(otherUserName ==null && otherTeam == ChessGame.TeamColor.WHITE){
                 otherUserName = "White is in Checkmate and lost the game";
