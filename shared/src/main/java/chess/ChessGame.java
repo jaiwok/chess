@@ -20,6 +20,7 @@ public class ChessGame {
     private ChessBoard board;
     private boolean pawnMoved2Spots;
     private ChessPosition pawnMovement;
+    private GameStatus status;
 
 
     public ChessGame() {
@@ -29,6 +30,7 @@ public class ChessGame {
 
         this.pawnMoved2Spots = false;
         pawnMovement = null;
+        status= GameStatus.GAME_RUNNING;
     }
 
     /**
@@ -47,12 +49,28 @@ public class ChessGame {
         currentTeam = team;
     }
 
+    public GameStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameStatus status) {
+        this.status = status;
+    }
+
     /**
      * Enum identifying the 2 possible teams in a chess game
      */
     public enum TeamColor {
         WHITE,
         BLACK
+    }
+
+    /**
+     * Enum identifying the 2 possible teams in a chess game
+     */
+    public enum GameStatus {
+        GAME_OVER,
+        GAME_RUNNING
     }
 
     /**
