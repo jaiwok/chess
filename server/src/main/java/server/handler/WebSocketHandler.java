@@ -100,8 +100,6 @@ public class WebSocketHandler {
             throws DataAccessException, IOException, InvalidMoveException {
 
         ChessGame.TeamColor team = gameData.game().getTeamTurn();
-
-        //set up team color and username to check for endgame conditions of other player
         ChessGame.TeamColor otherTeam = ChessGame.TeamColor.WHITE;
         String otherUserName = gameData.whiteUsername();
         if(team == ChessGame.TeamColor.WHITE ){
@@ -132,7 +130,6 @@ public class WebSocketHandler {
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
             return;
         }
-
         if(gameData.game().getStatus() == ChessGame.GameStatus.GAME_OVER){
             ServerError load = new ServerError(ServerMessageType.ERROR, "Error: Game is over no moves to make");
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
@@ -143,13 +140,11 @@ public class WebSocketHandler {
             moves = gameData.game().validMoves(move.getStartPosition());
         }catch (Exception e){
         }
-
         if( moves == null || !moves.contains(move) ) {
             ServerError load = new ServerError(ServerMessageType.ERROR, "Error: Your move is not possible");
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
             return;
         }
-
         try {
             gameData.game().makeMove(move);
         }catch (Exception e){
@@ -157,24 +152,18 @@ public class WebSocketHandler {
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
             return;
         }
-
-
         Boolean gameOver = false;
         if(gameData.game().isInCheckmate(otherTeam) ){
             gameData.game().setStatus(ChessGame.GameStatus.GAME_OVER);
             gameOver = true;
         }
-
         ServerNotification notification= new ServerNotification(ServerMessageType.NOTIFICATION, username + " moved from " + getMoveString(move));
         sessions.broadcastMessage(gameData.gameID(), gson.toJson(notification), session);
-
-        //update the database and notify all users of updated game
         gameDao.updateGame(gameData);
         ServerLoadGame serverNotification = new ServerLoadGame(ServerMessageType.LOAD_GAME, gameData.game());
         sessions.broadcastMessage(gameData.gameID(), gson.toJson(serverNotification), null);
 
         if(gameOver){
-
             if(otherUserName ==null && otherTeam == ChessGame.TeamColor.WHITE){
                 otherUserName = "White is in Checkmate and lost the game";
             }else if(otherUserName == null){
@@ -182,28 +171,22 @@ public class WebSocketHandler {
             }else{
                 otherUserName = otherUserName + " is in Checkmate and lost the game";
             }
-
             notification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, otherUserName);
             sessions.broadcastMessage(gameData.gameID(), gson.toJson(notification), null);
             return;
         }
-
         if(gameData.game().isInStalemate(otherTeam) ){
             gameData.game().setStatus(ChessGame.GameStatus.GAME_OVER);
             gameOver = true;
         }
-
         if(gameOver){
-
             otherUserName = " Stalemate no one wins";
             notification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, otherUserName);
             sessions.broadcastMessage(gameData.gameID(), gson.toJson(notification), null);
             return;
         }
-
         //if game is still running check if the move put the other person in check
         if( gameData.game().isInCheck(otherTeam) ){
-
             if(otherUserName ==null && otherTeam == ChessGame.TeamColor.WHITE){
                 otherUserName = "White is in Check";
             }else if(otherUserName == null){
@@ -211,7 +194,6 @@ public class WebSocketHandler {
             }else{
                 otherUserName = otherUserName + " is in Check";
             }
-
             notification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, otherUserName);
             sessions.broadcastMessage(gameData.gameID(), gson.toJson(notification), null);
         }

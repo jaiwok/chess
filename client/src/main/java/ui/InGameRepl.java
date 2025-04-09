@@ -165,7 +165,7 @@ public class InGameRepl extends UserInterface{
                 case "N" -> promotion = ChessPiece.PieceType.KNIGHT;
                 default -> throw new Exception(SET_TEXT_COLOR_RED +
                         "Invalid promotion piece: " +
-                        params[2] + 
+                        params[2] +
                         " Expected Q, R, B, N \n" +
                         RESET_TEXT_COLOR);
             }
