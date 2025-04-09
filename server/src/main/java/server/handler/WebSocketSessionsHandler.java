@@ -26,15 +26,9 @@ public class WebSocketSessionsHandler {
         }
     }
 
-    public Set<Session> getSessionsSet(GameId gameId) {
-        return sessionMap.get(gameId);
-    }
-
-    // send a message
     public void sendMessage(String message, Session session) throws IOException {
         if(session.isOpen()){
             session.getRemote().sendString(message);
-//            System.out.println("Message sent" + message);
         }
     }
 
