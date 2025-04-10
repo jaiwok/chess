@@ -105,6 +105,11 @@ public class WebSocketHandler {
             otherTeam = ChessGame.TeamColor.BLACK;
             otherUserName = gameData.blackUsername();
         }
+        if(gameData.game().getStatus() == ChessGame.GameStatus.GAME_OVER){
+            ServerError load = new ServerError(ServerMessageType.ERROR, "Error: Game is over no moves to make");
+            sessions.sendMessage(gson.toJson(load), session); //Send game to client
+            return;
+        }
         if(team == ChessGame.TeamColor.WHITE &&
            gameData.blackUsername() != null &&
            gameData.blackUsername().equals(username)) {
@@ -123,11 +128,6 @@ public class WebSocketHandler {
                 !gameData.blackUsername().equals(username)
         ){
             ServerError load = new ServerError(ServerMessageType.ERROR, "Error: You're just observing, you can't make moves");
-            sessions.sendMessage(gson.toJson(load), session); //Send game to client
-            return;
-        }
-        if(gameData.game().getStatus() == ChessGame.GameStatus.GAME_OVER){
-            ServerError load = new ServerError(ServerMessageType.ERROR, "Error: Game is over no moves to make");
             sessions.sendMessage(gson.toJson(load), session); //Send game to client
             return;
         }
